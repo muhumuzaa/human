@@ -24,10 +24,10 @@ const AuthContext = ({children}) => {
             }
                 
             }catch(error){
-                if(error.response && !error.response.data.error){
-                    console.log('Server error: ', error.response.data.error);
-                    
-                }
+                
+                    console.log('Verification error: ', error?.response?.data?.error || error);
+                    setUser(null)
+                
             }
             
         } 
@@ -36,7 +36,7 @@ const AuthContext = ({children}) => {
 
     const login =(user) =>{
         setUser(user)
-        localStorage.getItem(user.token)
+        localStorage.setItem('token', user.token)
     }
     const logout = () =>{
         setUser(null)

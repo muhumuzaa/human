@@ -9,7 +9,7 @@ const router = express.Router();
 
 
 router.post('/login', Login);
-router.post('/verify', authMiddleware, verify )
+router.get('/verify', authMiddleware, verify )
 
 
 

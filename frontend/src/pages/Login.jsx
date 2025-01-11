@@ -31,13 +31,17 @@ const Login = () => {
 
     try{
       const response = await axios.post('http://localhost:3000/api/auth/login', loginCreds)
-      if(response.data.user.role === 'admin'){
+      if(response.data.success){
         login(response.data.user)
         localStorage.setItem('token', response.data.token)
-        navigate('/admin-dashboard')
-      }else{
-        navigate('/employee-dashboard')
+
+        if(response.data.user.role ==='admin'){
+          navigate('/admin-dashboard')
+        }else{
+          navigate('/employee-dashboard')
+        }
       }
+      
       
       
     }catch(error){
