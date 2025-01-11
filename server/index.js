@@ -1,15 +1,30 @@
-import express from 'express'
-import cors from 'cors'
-import authRouter from './routes/auth.js'
-import connectToDB from './db/db.js'
+import express from 'express';
+import cors from 'cors';  // Make sure you're importing 'cors' correctly
+import router from './routes/auth.js';
+import connectToDB from './db/db.js';
 
-connectToDB();
 const app = express();
-app.use(cors())
-app.use(express.json())
-app.use('/api/auth', authRouter)
 
-app.listen(process.env.PORT, () => {
-    console.log(`Server is running on port ${process.env.PORT}`);
-    
-})
+// Make sure to call the cors middleware function
+app.use(cors());
+
+// Parse incoming requests with JSON payloads
+app.use(express.json());
+
+// Use the correct route for authentication
+app.use('/api/auth', router);
+
+// Connect to the database and then start the server
+const startServer = async () => {
+  try {
+    await connectToDB(); // Ensure the database connection is successful
+    const PORT = process.env.PORT || 3000; // Use 3000 if PORT is not defined
+    app.listen(PORT, () => {
+      console.log(`Server is listening on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error('Error connecting to the database:', error);
+  }
+};
+
+startServer();

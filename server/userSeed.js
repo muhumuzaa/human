@@ -1,23 +1,27 @@
-import connectTodb from "./db/db.js";
-import User from "./models/User.js";
+import User from "./models/User.js"
 import bcrypt from 'bcrypt'
+import connectTodb from "./db/db.js"
+
 
 const userRegister = async() =>{
+
     connectTodb()
+    const hashedPassword = await bcrypt.hash('admin', 10)
     try{
-        const hashedPassword = await bcrypt.hash('admin', 10)
         const newUser = new User({
             name: 'Admin',
             email: 'admin@gmail.com',
             password: hashedPassword,
-            role: 'admin',
+            role: 'admin'
         })
-
+    
         await newUser.save();
+
     }catch(error){
-        console.log(error);
+        console.log('failed to create new user: ', error);
         
     }
+    
 }
 
-userRegister();
+export default userRegister();

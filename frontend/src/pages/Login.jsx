@@ -1,5 +1,8 @@
-import { useState } from "react";
+import {useState } from "react";
 import axios from 'axios'
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+
 
 
 
@@ -13,6 +16,10 @@ const Login = () => {
   });
 
   const [credError, setCredError] = useState(null);
+  const navigate = useNavigate()
+
+  const {login} = useAuth()
+
 
   const handleInputChange = (e) =>{
     const {name, value} = e.target;
@@ -24,14 +31,22 @@ const Login = () => {
 
     try{
       const response = await axios.post('http://localhost:3000/api/auth/login', loginCreds)
-      if(response.data.success){
-        alert('Logged in successfully')
+      if(response.data.user.role === 'admin'){
+        login(response.data.user)
+        localStorage.setItem('token', response.data.token)
+        navigate('/admin-dashboard')
+      }else{
+        navigate('/employee-dashboard')
       }
+      
       
     }catch(error){
       console.log(error);
-      //setCredError(response.data.statusText)
-      setCredError(error.response.data.error)
+      if(error.response){
+        setCredError(error.response.data.error)
+      }else{
+        setCredError('Server error')
+      }
       
 
     }
