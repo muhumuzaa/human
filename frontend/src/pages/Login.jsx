@@ -4,10 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 
-
-
-
-
 const Login = () => {
 
   const [loginCreds, setLoginCreds] = useState({
@@ -37,10 +33,12 @@ const Login = () => {
 
         if(response.data.user.role ==='admin'){
           navigate('/admin-dashboard')
+          
         }else{
           navigate('/employee-dashboard')
         }
       }
+      
       
       
       

@@ -5,6 +5,7 @@ const userContext = createContext()
 const AuthContext = ({children}) => {
 
     const [user, setUser] = useState(null)
+    const [loading, setLoading] = useState(true)
 
     useEffect(() =>{
         const verifyUser = async() =>{
@@ -17,9 +18,10 @@ const AuthContext = ({children}) => {
                 })
                 if(response.data.success){
                     setUser(response.data.user)
+                    
                 }else{
                     setUser(null)
-                    
+                    setLoading(false)
                 }
             }
                 
@@ -27,7 +29,11 @@ const AuthContext = ({children}) => {
                 
                     console.log('Verification error: ', error?.response?.data?.error || error);
                     setUser(null)
+                    
                 
+            } 
+            finally{
+                setLoading(false)
             }
             
         } 
@@ -44,7 +50,7 @@ const AuthContext = ({children}) => {
 
     }
   return (
-    <userContext.Provider value={{user, login, logout}}>
+    <userContext.Provider value={{user, login, logout, loading}}>
         {children}
     </userContext.Provider>
   )
