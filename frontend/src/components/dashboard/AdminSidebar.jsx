@@ -10,7 +10,7 @@ import { NavLink } from "react-router-dom";
 const AdminSidebar = () => {
   return (
     <div className="flex flex-col justify-between min-h-screen py-8">
-      <a href="#" className="font-bold">
+      <a href="#" className="font-bold text-gray-700">
         Human Force
       </a>
 
