@@ -1,8 +1,9 @@
 // import { useEffect } from "react";
 // import { useNavigate } from "react-router-dom";
 //import AdminSidebar from "../components/dashboard/AdminSidebar";
+import { Outlet } from "react-router-dom";
 import AdminSidebar from "../components/dashboard/AdminSidebar";
-import Dashboard from "../components/dashboard/Dashboard";
+//import Dashboard from "../components/dashboard/Dashboard";
 import Navbar from "../components/dashboard/Navbar";
 import { useAuth } from "../context/AuthContext";
 
@@ -19,7 +20,7 @@ const AdminDashboard = () => {
 
         <div className="w-3/4 py-6">
         <Navbar />
-        <Dashboard />
+        <Outlet />
          
         </div>
       </div>

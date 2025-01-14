@@ -22,22 +22,13 @@ const AdminSidebar = () => {
               ? "flex space-x-2 items-center rounded-lg text-white text-sm hover:text-white bg-indigo-600 py-3 px-2 mb-2"
               : "flex space-x-2 items-center rounded-lg text-gray-700 text-sm hover:text-white hover:bg-indigo-600 py-3 px-2 mb-2"
           }
+          end
         >
           <FaHouseUser className="" />
           <span className="">Dashboard</span>
         </NavLink>
 
-        <NavLink to={'/employee-dashboard'}
-          className={({ isActive }) =>
-            isActive
-              ? "flex space-x-2 items-center rounded-lg text-white text-sm hover:text-white bg-indigo-600 py-3 px-2 mb-2"
-              : "flex space-x-2 items-center rounded-lg text-gray-700 text-sm hover:text-white hover:bg-indigo-600 py-3 px-2 mb-2"
-          }
-        >
-          <FaPeopleGroup className="" />
-          <span className="">Employees</span>
-        </NavLink>
-        <NavLink to={'/departments'}
+        <NavLink to={'admin-dashboard/departments'}
           className={({ isActive }) =>
             isActive
               ? "flex space-x-2 items-center rounded-lg text-white text-sm hover:text-white bg-indigo-600 py-3 px-2 mb-2"
@@ -47,7 +38,19 @@ const AdminSidebar = () => {
           <FaBuilding className="" />
           <span className="">Departments</span>
         </NavLink>
-        <NavLink to={'/leaves'}
+
+        <NavLink to={'admin-dashboard/employees'}
+          className={({ isActive }) =>
+            isActive
+              ? "flex space-x-2 items-center rounded-lg text-white text-sm hover:text-white bg-indigo-600 py-3 px-2 mb-2"
+              : "flex space-x-2 items-center rounded-lg text-gray-700 text-sm hover:text-white hover:bg-indigo-600 py-3 px-2 mb-2"
+          }
+        >
+          <FaPeopleGroup className="" />
+          <span className="">Employees</span>
+        </NavLink>
+
+        <NavLink to={'admin-dashboard/leaves'}
           className={({ isActive }) =>
             isActive
               ? "flex space-x-2 items-center rounded-lg text-white text-sm hover:text-white bg-indigo-600 py-3 px-2 mb-2"
@@ -57,7 +60,7 @@ const AdminSidebar = () => {
           <FaWalking className="" />
           <span className="">Leaves</span>
         </NavLink>
-        <NavLink to={'/salary'}
+        <NavLink to={'admin-dashboard/salary'}
           className={({ isActive }) =>
             isActive
               ? "flex space-x-2 items-center rounded-lg text-white text-sm hover:text-white bg-indigo-600 py-3 px-2 mb-2"
@@ -67,7 +70,7 @@ const AdminSidebar = () => {
           <FaMoneyBillAlt className="" />
           <span className="">Salary</span>
         </NavLink>
-        <NavLink to={'/support'}
+        <NavLink to={'admin-dashboard/support'}
           className={({ isActive }) =>
             isActive
               ? "flex space-x-2 items-center rounded-lg text-white text-sm hover:text-white bg-indigo-600 py-3 px-2 mb-2"
