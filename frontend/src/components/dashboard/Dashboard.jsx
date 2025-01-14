@@ -1,20 +1,15 @@
 import {
   FaArrowUpRightDots,
-  FaCross,
   FaEarthAfrica,
   FaFileCircleXmark,
-  FaPaperclip,
   FaPeopleRoof,
   FaWalkieTalkie,
-  FaXmark,
-  FaXmarksLines,
+
 } from "react-icons/fa6";
 import InfoCard from "./dashboard_elements/InfoCard";
 import {
   FaArrowAltCircleRight,
   FaBatteryThreeQuarters,
-  FaCheck,
-  FaCheckSquare,
   FaPage4,
 } from "react-icons/fa";
 import Bargraph from "./dashboard_elements/Bargraph";

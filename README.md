@@ -1,1 +1,2 @@
-This is an Employment Management Application built on React and Node.
+This is an Employment Management Application built using React and Nodejs.
+![Screenshot of the App](manforce.png)
