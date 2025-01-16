@@ -12,9 +12,9 @@ const DepartmentList = () => {
 
   
 
-  const handleFormOpen = (department = null) => {
-    console.log('handleFormOpen called with:', department);
-    setEditDept(department)
+  const handleFormOpen = () => {
+    console.log('handleFormOpen called ');
+    setEditDept(null)
     setShowDepForm(true)
   };
   const handleFormClose = () => {

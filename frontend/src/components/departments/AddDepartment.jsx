@@ -12,7 +12,7 @@ const AddDepartment = ({ onClose, onRefresh, department }) => {
   // Otherwise (add mode), reset to an empty department object.
   useEffect(() => {
     if (department) {
-        console.log('handleFormOpen called with:', department.dep_name);
+        console.log('handleFormOpen called with:', department);
       setDep(department);
     } else {
       setDep({ dep_name: "", description: "" });
