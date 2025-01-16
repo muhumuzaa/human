@@ -7,6 +7,7 @@ import RoleBasedRoutes from "./utils/RoleBasedRoutes";
 import DashboardSummary from "./components/dashboard/DashboardSummary";
 import DepartmentList from "./components/departments/DepartmentList";
 
+
 function App() {
   return (
     <BrowserRouter>
@@ -24,13 +25,14 @@ function App() {
           }
         >
           <Route index element={<DashboardSummary />}></Route>
-          <Route path='admin-dashboard/departments' element={<DepartmentList />}></Route>
-          <Route path='admin-dashboard/employees' element={<DepartmentList />}></Route>
-          <Route path='admin-dashboard/departments' element={<DepartmentList />}></Route>
-          <Route path='admin-dashboard/departments' element={<DepartmentList />}></Route>
+          <Route path='departments' element={<DepartmentList />}></Route>
+          <Route path='employees' element={<DepartmentList />}></Route>
+          <Route path='salary' element={<DepartmentList />}></Route>
+          <Route path='leaves' element={<DepartmentList />}></Route>
+          
         </Route>
         <Route
-          path="/employee-dashboard"
+          path="employee-dashboard"
           element={<EmployeeDashboard />}
         ></Route>
       </Routes>
