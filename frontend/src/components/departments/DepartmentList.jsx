@@ -1,14 +1,27 @@
 import { useEffect, useState } from "react";
 import AddDepartment from "./AddDepartment";
 import axios from "axios";
+import DepartmentCard from "./DepartmentCard";
 
 const DepartmentList = () => {
-  const [showDepForm, setShowDepForm] = useState(false);
-
-  const handleFormOpen = () => setShowDepForm(true);
-  const handleFormClose = () => setShowDepForm(false);
 
   const [depList, setDepList] = useState([]);
+  const [showDepForm, setShowDepForm] = useState(false);
+  const [editDept, setEditDept] = useState(null)
+
+
+  
+
+  const handleFormOpen = (department = null) => {
+    console.log('handleFormOpen called with:', department);
+    setEditDept(department)
+    setShowDepForm(true)
+  };
+  const handleFormClose = () => {
+    setEditDept(null)
+    setShowDepForm(false)
+  };
+
 
   const getDepartmentList = async () => {
     try {
@@ -31,31 +44,56 @@ const DepartmentList = () => {
     getDepartmentList();
   }, []);
 
+  const handleDelDep = async(id) =>{
+    try{
+      
+    const response = await axios.delete('http://localhost:3000/api/department/delete', {
+      params: {id}, 
+      headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}
+    })
+    if(response.data.success){
+      alert(response.data.message)
+      getDepartmentList();
+    }
+    }catch(error){
+      if(error.response && !error.response.data.success){
+        alert(error.response.data.error)
+      }else{
+        console.log('Server error')
+      }
+    }
+  }
+
+  const handleEditDep = async(department) =>{
+    setEditDept(department)
+    setShowDepForm(true)
+  }
+
   return (
     <div className="relative">
       {/* Main Content */}
       <div className={`${showDepForm ? "blur-sm pointer-events-none" : ""}`}>
         <h3>Department List</h3>
-        <div className="flex justify-between">
+        <div className="flex justify-between mb-2">
           <input
             placeholder="Search by Department Name"
             className="p-2 border border-gray-300 rounded"
           />
           <button
-            className="bg-indigo-600 hover:bg-indigo-700 text-slate-50 rounded-xl py-1 px-2"
+            className="bg-indigo-600 hover:bg-indigo-700 text-slate-50 rounded-lg py-1 px-2"
             onClick={handleFormOpen}
           >
             Add Department
           </button>
         </div>
 
-        <ul className="mb-4">
+        <div className="mb-4 bg-white rounded-lg p-4">
           {depList.map((dep) => (
-            <li key={dep._id} className="border-b border-gray-200 py-2">
-              {dep.dep_name} - {dep.description}
-            </li>
+           
+              <DepartmentCard key={dep._id} department={dep} editDep={handleEditDep} deleteDep={handleDelDep}/>
+            
           ))}
-        </ul>
+        </div>
       </div>
 
       {/* Popup Modal */}
@@ -72,6 +110,8 @@ const DepartmentList = () => {
             <AddDepartment
               onClose={handleFormClose}
               onRefresh={getDepartmentList}
+              department={editDept}
+              
             />
           </div>
         </div>

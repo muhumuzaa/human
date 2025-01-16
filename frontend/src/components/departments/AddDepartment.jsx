@@ -1,53 +1,90 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaXmark } from "react-icons/fa6";
 
-const AddDepartment = ({ onClose, getDepartmentList }) => {
+const AddDepartment = ({ onClose, onRefresh, department }) => {
   const [dep, setDep] = useState({
     dep_name: "",
     description: "",
   });
 
+  // If 'department' is provided (edit mode), pre-fill form with its data.
+  // Otherwise (add mode), reset to an empty department object.
+  useEffect(() => {
+    if (department) {
+        console.log('handleFormOpen called with:', department.dep_name);
+      setDep(department);
+    } else {
+      setDep({ dep_name: "", description: "" });
+    }
+  }, [department]);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setDep({ ...dep, [name]: value });
+    setDep((prevDep) => ({ ...prevDep, [name]: value }));
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("formdata", dep);
-    console.log("token", localStorage.getItem("token"));
+
+    console.log("Form data to be submitted:", dep);
+
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/department/add",
-        dep,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      if (department) {
+        // We have a department => Edit mode (PUT)
+        console.log("Edit mode: Sending PUT request");
+        const response = await axios.put(
+          `http://localhost:3000/api/department/update/${department._id}`,
+          dep,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+
+        if (response.data.success) {
+          alert("Department updated successfully");
+          onRefresh();   // Refresh department list
+          onClose();     // Close the modal
         }
-      );
-      if (response.data.success) {
-        console.log("Successfully added the new department.", response.data);
-        onClose();
-        getDepartmentList();
+      } else {
+        // No department => Add mode (POST)
+        console.log("Add mode: Sending POST request");
+        const response = await axios.post(
+          "http://localhost:3000/api/department/add",
+          dep,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+
+        if (response.data.success) {
+          alert("Successfully added the new department.");
+          onRefresh();   // Refresh department list
+          onClose();     // Close the modal
+        }
       }
     } catch (error) {
-      if (error.response && !error.response.data.success) {
+      console.error("Error while saving department:", error);
+      if (error.response && error.response.data.error) {
         alert(error.response.data.error);
       }
     }
-    onClose();
   };
 
   return (
     <div className="bg-white w-[26rem] mx-auto rounded-lg p-4">
       <div className="flex justify-between">
         <span className="text-xl font-semibold text-gray-700 mb-6 block">
-          Add Department
+          {department ? "Edit Department" : "Add Department"}
         </span>
         <div
           onClick={onClose}
-          className="p-1 border border-gray-200 hover:bg-gray-200 rounded-full w-6 h-6"
+          className="p-1 border border-gray-200 hover:bg-gray-200 rounded-full w-6 h-6 cursor-pointer"
         >
-          {" "}
           <FaXmark className="text-gray-300 hover:text-gray-500" />
         </div>
       </div>
@@ -61,7 +98,7 @@ const AddDepartment = ({ onClose, getDepartmentList }) => {
             type="text"
             name="dep_name"
             onChange={handleInputChange}
-            value={dep.dep_name}
+            value={dep.dep_name || ""}
             className="p-2 border border-gray-200 rounded-xl w-full"
           />
         </div>
@@ -70,28 +107,27 @@ const AddDepartment = ({ onClose, getDepartmentList }) => {
             Description
           </label>
           <textarea
-            type="text"
             name="description"
             rows="4"
             onChange={handleInputChange}
-            value={dep.description}
+            value={dep.description || ""}
             className="p-2 border border-gray-200 rounded-xl w-full"
           />
         </div>
 
         <div className="flex justify-between">
           <button
-            className="hover:bg-gray-700 py-1 px-3 rounded-xl text-gray-800 border border-gray-400 hover:text-slate-50"
             type="button"
-            onClick={() => onClose()}
+            className="hover:bg-gray-700 py-1 px-3 rounded-xl text-gray-800 border border-gray-400 hover:text-slate-50"
+            onClick={onClose}
           >
             Cancel
           </button>
           <button
-            className="bg-indigo-500 hover:bg-indigo-700 py-1 px-3 rounded-xl text-slate-50"
             type="submit"
+            className="bg-indigo-500 hover:bg-indigo-700 py-1 px-3 rounded-xl text-slate-50"
           >
-            Create Department
+            {department ? "Update Department" : "Create Department"}
           </button>
         </div>
       </form>

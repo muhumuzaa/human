@@ -16,6 +16,7 @@ app.use(express.json());
 app.use('/api/auth', router);
 app.use('/api/department', departmentRouter)
 app.use('/department/list', departmentRouter)
+app.use('/department/delete', departmentRouter)
 
 // Connect to the database and then start the server
 const startServer = async () => {
