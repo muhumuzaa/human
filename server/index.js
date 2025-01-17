@@ -17,6 +17,7 @@ app.use('/api/auth', router);
 app.use('/api/department', departmentRouter)
 app.use('/department/list', departmentRouter)
 app.use('/department/delete', departmentRouter)
+app.use('/department/update:id', departmentRouter)
 
 // Connect to the database and then start the server
 const startServer = async () => {

@@ -28,6 +28,7 @@ const DepartmentList = () => {
       const response = await axios.get(
         "http://localhost:3000/api/department/list"
       );
+      console.log('Department List:', response.data.departments);
       if (response.data.success) {
         setDepList(response.data.departments);
       }

@@ -4,14 +4,14 @@ const DepartmentCard = ({department, editDep, deleteDep}) => {
       <div className="">
         <span className="font-semibold block">{department.dep_name}</span>
         <span className="block">{department.description}</span>
-        <span className="block">{new Date(department.createdAt).toLocaleString()}</span>
+        <span className="block">{new Date(department.createAt).toLocaleDateString()}</span>
       </div>
 
-      <div className="space-x-2">
-        <button className="bg-indigo-600 text-white py-1 px-2 rounded-lg" onClick={()=>editDep(department)}>
+      <div className="space-x-6">
+        <button className="border border-gray-400 text-gray-700 py-1 px-2 rounded-lg hover:bg-gray-200" onClick={()=>editDep(department)}>
           Edit
         </button>
-        <button className="bg-red-500 text-white py-1 px-2 rounded-lg" onClick={() =>deleteDep(department._id)}>
+        <button className="bg-indigo-500 hover:bg-indigo-600 text-white py-1 px-2 rounded-lg" onClick={() =>deleteDep(department._id)}>
           Delete
         </button>
       </div>
