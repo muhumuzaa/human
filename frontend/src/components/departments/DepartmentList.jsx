@@ -28,7 +28,7 @@ const DepartmentList = () => {
       const response = await axios.get(
         "http://localhost:3000/api/department/list"
       );
-      console.log('Department List:', response.data.departments);
+      
       if (response.data.success) {
         setDepList(response.data.departments);
       }
@@ -71,7 +71,7 @@ const DepartmentList = () => {
   }
 
   return (
-    <div className="relative">
+    <div className="relative shadow rounded-lg">
       {/* Main Content */}
       <div className={`${showDepForm ? "blur-sm pointer-events-none" : ""}`}>
         <h3>Department List</h3>

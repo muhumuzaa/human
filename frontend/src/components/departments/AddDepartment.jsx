@@ -6,6 +6,8 @@ const AddDepartment = ({ onClose, onRefresh, department }) => {
   const [dep, setDep] = useState({
     dep_name: "",
     description: "",
+    lead: "",
+    employees: ""
   });
 
   // If 'department' is provided (edit mode), pre-fill form with its data.
@@ -15,7 +17,7 @@ const AddDepartment = ({ onClose, onRefresh, department }) => {
         console.log('handleFormOpen called with:', department);
       setDep(department);
     } else {
-      setDep({ dep_name: "", description: "" });
+      setDep({ dep_name: "", description: "", lead: "", employees: "" });
     }
   }, [department]);
 
@@ -114,7 +116,19 @@ const AddDepartment = ({ onClose, onRefresh, department }) => {
             className="p-2 border border-gray-200 rounded-xl w-full"
           />
         </div>
-
+        <div className="mb-4">
+          <label htmlFor="lead" className="block">
+            Department Lead
+          </label>
+          <input
+            type="text"
+            name="lead"
+            onChange={handleInputChange}
+            value={dep.lead || ""}
+            placeholder="optional"
+            className="p-2 border border-gray-200 rounded-xl w-full"
+          />
+        </div>
         <div className="flex justify-between">
           <button
             type="button"
