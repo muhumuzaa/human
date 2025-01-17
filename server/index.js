@@ -1,8 +1,10 @@
 import express from 'express';
 import cors from 'cors';  // Make sure you're importing 'cors' correctly
 import router from './routes/auth.js';
-import departmentRouter from './routes/department.js'
 import connectToDB from './db/db.js';
+import departmentRouter from './routes/department.js'
+import employeeRouter from './routes/employee.js'
+
 
 const app = express();
 
@@ -13,11 +15,15 @@ app.use(cors());
 app.use(express.json());
 
 // Use the correct route for authentication
+//For department
 app.use('/api/auth', router);
 app.use('/api/department', departmentRouter)
 app.use('/department/list', departmentRouter)
 app.use('/department/delete', departmentRouter)
 app.use('/department/update:id', departmentRouter)
+
+//For employees
+app.use('/employee/add', employeeRouter)
 
 // Connect to the database and then start the server
 const startServer = async () => {

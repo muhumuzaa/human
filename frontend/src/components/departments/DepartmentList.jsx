@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import AddDepartment from "./AddDepartment";
+import AddDepartment from "./DepartmentForm";
 import axios from "axios";
 import DepartmentCard from "./DepartmentCard";
+import {useDepartments} from '../../context/DepartmentContext'
 
 const DepartmentList = () => {
 
-  const [depList, setDepList] = useState([]);
+  const {departments, error, loading} = useDepartments();
   const [showDepForm, setShowDepForm] = useState(false);
   const [editDept, setEditDept] = useState(null)
 
