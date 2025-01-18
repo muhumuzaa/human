@@ -20,6 +20,7 @@ const DepartmentForm = ({ onClose, onAddOrEdit, department }) => {
         description: department.description || "",
         lead: department.lead || "",
         employees: department.employees || "",
+        _id: department._id || ""
       });
     } else {
       setDep({ dep_name: "", description: "", lead: "", employees: "" });
