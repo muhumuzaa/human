@@ -27,7 +27,7 @@ const DepartmentCard = ({ department, editDep, deleteDep }) => {
         </button>
         <button
           className="bg-indigo-500 hover:bg-indigo-600 text-white py-1 px-2 rounded-lg text-sm"
-          onClick={() => deleteDep(department._id)}
+          onClick={deleteDep}
         >
           Delete
         </button>

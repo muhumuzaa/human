@@ -44,7 +44,10 @@ const DepartmentProvider = ({ children }) => {
         }
       );
       if (response.data.success) {
-        setDepList((prev) => prev.filter((dep) => dep.id !== id));
+        console.log('successfully deleted')
+        
+        setDepList((prev) => prev.filter((dep) => dep._id !== id));
+        alert('Deleted')
       } else {
         throw new Error(response.data.error);
       }
