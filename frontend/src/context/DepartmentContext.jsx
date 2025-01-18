@@ -1,44 +1,115 @@
-import axios from "axios"
+import axios from "axios";
 
-import { createContext, useContext, useEffect, useState } from "react"
+import { createContext, useContext, useEffect, useState } from "react";
 
-const DepartmentContext = createContext()
-const DepartmentProvider = ({children}) => {
-    const [depList, setDepList] = useState([])
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState('')
+const DepartmentContext = createContext();
+const DepartmentProvider = ({ children }) => {
+  const [depList, setDepList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-    useEffect(() =>{
-        const fetchDepartments = async() =>{
-            try {
-                const response = await axios.get(
-                  "http://localhost:3000/api/department/list"
-                );
-                
-                if (response.data.success) {
-                  setDepList(response.data.departments);
-                }else{
-                    setError('Error fetching departments')
-                }
-              } catch (error) {
-                if (error.response && !error.response.data.success) {
-                  alert(error.response.data.error);
-                } else {
-                  setError(error.message || 'Server error when fetching departments')
-                }
-              }finally{
-                setLoading(false)
-              }
-            };
-            fetchDepartments()
-    }, [])
+  const fetchDepartments = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await axios.get(
+        "http://localhost:3000/api/department/list"
+      );
+
+      if (response.data.success) {
+        setDepList(response.data.departments);
+      } else {
+        setError("Error fetching departments");
+      }
+    } catch (error) {
+      if (error.response && !error.response.data.success) {
+        alert(error.response.data.error);
+      } else {
+        setError(
+          error.response.data.error || "Server error when fetching departments"
+        );
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteDepartment = async (id) => {
+    try {
+      const response = await axios.delete(
+        "http://localhost:3000/api/department/delete",
+        {
+          params: { id },
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+      if (response.data.success) {
+        setDepList((prev) => prev.filter((dep) => dep.id !== id));
+      } else {
+        throw new Error(response.data.error);
+      }
+    } catch (error) {
+      if (error.response && !error.response.data.success) {
+        alert(error.response.data.error);
+      } else {
+        console.log("Server error");
+      }
+    }
+  };
+
+  const addOrEditDepartment = async (department) => {
+    try {
+      if (department._id) {
+        // Update existing department
+        const response = await axios.put(
+          `http://localhost:3000/api/department/update/${department._id}`,
+          department,
+          {
+            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          }
+        );
+  
+        if (response.data.success) {
+          setDepList((prev) =>
+            prev.map((dep) =>
+              dep._id === department._id ? response.data.department : dep
+            )
+          );
+        }
+      } else {
+        // Add new department
+        const response = await axios.post(
+          "http://localhost:3000/api/department/add",
+          department,
+          {
+            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          }
+        );
+  
+        if (response.data.success) {
+          setDepList((prev) => [...prev, response.data.department]);
+        }
+      }
+    } catch (error) {
+      console.error("Error in addOrEditDepartment:", error.message);
+      alert(error.response?.data?.error || "Error saving department");
+    }
+  };
+  
+  
+
+  useEffect(() => {
+    fetchDepartments();
+  }, []);
   return (
-    <DepartmentContext.Provider value={{depList, loading, error}}>
-        {children}
+    <DepartmentContext.Provider
+      value={{ depList, loading, error, fetchDepartments, deleteDepartment, addOrEditDepartment }}
+    >
+      {children}
     </DepartmentContext.Provider>
-  )
-}
+  );
+};
 
-export const DepContext = () => useContext(DepartmentContext)
+export const useDepartments = () => useContext(DepartmentContext);
 
-export default DepartmentProvider
+export default DepartmentProvider;

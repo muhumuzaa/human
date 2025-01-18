@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { FaXmark } from "react-icons/fa6";
 
-const AddDepartment = ({ onClose, onRefresh, department }) => {
+const DepartmentForm = ({ onClose, onAddOrEdit, department }) => {
   const [dep, setDep] = useState({
     dep_name: "",
     description: "",
@@ -14,8 +14,13 @@ const AddDepartment = ({ onClose, onRefresh, department }) => {
   // Otherwise (add mode), reset to an empty department object.
   useEffect(() => {
     if (department) {
-        console.log('handleFormOpen called with:', department);
-      setDep(department);
+        
+      setDep({
+        dep_name: department.dep_name || "",
+        description: department.description || "",
+        lead: department.lead || "",
+        employees: department.employees || "",
+      });
     } else {
       setDep({ dep_name: "", description: "", lead: "", employees: "" });
     }
@@ -28,53 +33,15 @@ const AddDepartment = ({ onClose, onRefresh, department }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!dep.dep_name || !dep.description) {
+      alert("Department Name and Description are required.");
+      return;
+    }
 
     console.log("Form data to be submitted:", dep);
+    onAddOrEdit(dep)
+    onClose()
 
-    try {
-      if (department) {
-        // We have a department => Edit mode (PUT)
-        console.log("Edit mode: Sending PUT request");
-        const response = await axios.put(
-          `http://localhost:3000/api/department/update/${department._id}`,
-          dep,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-
-        if (response.data.success) {
-          alert("Department updated successfully");
-          onRefresh();   // Refresh department list
-          onClose();     // Close the modal
-        }
-      } else {
-        // No department => Add mode (POST)
-        console.log("Add mode: Sending POST request");
-        const response = await axios.post(
-          "http://localhost:3000/api/department/add",
-          dep,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-
-        if (response.data.success) {
-          alert("Successfully added the new department.");
-          onRefresh();   // Refresh department list
-          onClose();     // Close the modal
-        }
-      }
-    } catch (error) {
-      console.error("Error while saving department:", error);
-      if (error.response && error.response.data.error) {
-        alert(error.response.data.error);
-      }
-    }
   };
 
   return (
@@ -149,4 +116,4 @@ const AddDepartment = ({ onClose, onRefresh, department }) => {
   );
 };
 
-export default AddDepartment;
+export default DepartmentForm;

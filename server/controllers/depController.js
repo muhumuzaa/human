@@ -2,50 +2,24 @@ import { Department } from "../models/Department.js";
 
 const addDepartment = async (req, res) => {
   try {
-    const {
-      dep_name,
-      description,
-      lead = "Not Assigned",
-      employees = 0,
-    } = req.body;
+    const { dep_name, description, lead = "Not Assigned", employees = 0 } = req.body;
 
-    if (Array.isArray(req.body)) {
-      const departments = await Department.insertMany(
-        req.body.map((dep) => ({
-          dep_name: dep.dep_name,
-          description: dep.description,
-          lead: dep.lead || "Not Assigned",
-          employees: dep.employees || 0,
-        }))
-      );
-      return res.status(200).json(
-        {
-          success: true,
-          message: `${departments.length} added successfully`,
-        },
-        departments
-      );
-    } else {
-      if (!req.body.dep_name || !req.body.description) {
-        return res
-          .status(404)
-          .json({ success: false, error: "A field is missing data" });
-      }
-      const newDep = new Department({
-        dep_name,
-        description,
-        lead: lead || "Not Assigned",
-        employees: employees || 0,
-      });
-      await newDep.save();
-      return res.status(200).json({
-        success: true,
-        department: newDep,
-        message: "Successfully added new department",
-      });
+    if (!dep_name || !description) {
+      return res
+        .status(400)
+        .json({ success: false, error: "Department name and description are required" });
     }
+
+    const newDep = new Department({ dep_name, description, lead, employees });
+    await newDep.save();
+
+    return res.status(201).json({
+      success: true,
+      department: newDep,
+      message: "Successfully added new department",
+    });
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
     return res
       .status(500)
       .json({ success: false, error: "Server error while adding department" });
