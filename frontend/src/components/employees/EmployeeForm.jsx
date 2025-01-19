@@ -1,25 +1,41 @@
 import axios from "axios";
 import { useState } from "react";
 import { useDepartments } from "../../context/DepartmentContext";
+import { FaXmark } from "react-icons/fa6";
 
-const EmployeeForm = () => {
+const EmployeeForm = ({ onCancel }) => {
   const [employee, setEmployee] = useState({
     emp_name: "",
     email: "",
     tel: "",
     department: "",
     salary: "",
+    image: null,
   });
   const { depList } = useDepartments();
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEmployee({ ...employee, [name]: value });
   };
-  
+
+  const handleFileChange = (e) => {
+    setEmployee({ ...employee, image: e.target.files[0] });
+  };
+
   const handleEditorCreateEmployee = async (e) => {
     e.preventDefault();
+
     try {
-        
+      const formData = new FormData();
+      formData.append("emp_name", employee.emp_name);
+      formData.append("email", employee.email);
+      formData.append("tel", employee.tel);
+      formData.append("department", employee.department);
+      formData.append("salary", employee.salary);
+      if (employee.image) {
+        formData.append("image", employee.image);
+      }
+
       const response = await axios.post(
         "http://localhost:3000/api/employee/add",
         employee,
@@ -42,9 +58,17 @@ const EmployeeForm = () => {
 
   return (
     <div className="bg-white w-[26rem] mx-auto rounded-lg p-4 shadow-lg">
-      <h3 className="text-xl text-gray-700 font-semibold mb-4">
-        Add New Employee
-      </h3>
+      <div className="flex justify-between">
+        <span className="text-xl font-semibold text-gray-700 mb-6 block">
+          Add Employee
+        </span>
+        <div
+          onClick={onCancel}
+          className="p-1 border border-gray-200 hover:bg-gray-200 rounded-full w-6 h-6 cursor-pointer"
+        >
+          <FaXmark className="text-gray-300 hover:text-gray-500" />
+        </div>
+      </div>
       <form onSubmit={handleEditorCreateEmployee}>
         <div className="mb-4">
           <label htmlFor="emp_name" className="block">
@@ -119,10 +143,23 @@ const EmployeeForm = () => {
             className="p-2 border border-gray-200 rounded-xl w-full"
           />
         </div>
+        <div className="mb-4">
+          <label htmlFor="image" className="block">
+            Upload Image
+          </label>
+          <input
+            type="file"
+            name="image"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="p-2 border border-gray-200 rounded-xl w-full"
+          />
+        </div>
         <div className="flex justify-between">
           <button
             type="button"
             className="hover:bg-gray-700 py-1 px-3 rounded-xl text-gray-800 border border-gray-400 hover:text-slate-50"
+            onClick={onCancel}
           >
             Cancel
           </button>

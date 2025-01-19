@@ -42,7 +42,7 @@ const DepartmentList = () => {
           />
           <button
             className="bg-indigo-600 hover:bg-indigo-700 text-slate-50 rounded-lg py-1 px-2"
-            onClick={() =>handleFormOpen()}
+            onClick={() => handleFormOpen()}
           >
             Add Department
           </button>
@@ -73,7 +73,7 @@ const DepartmentList = () => {
             <DepartmentForm
               onClose={handleFormClose}
               department={editDept}
-              onAddOrEdit={ addOrEditDepartment}
+              onAddOrEdit={addOrEditDepartment}
             />
           </div>
         </div>
