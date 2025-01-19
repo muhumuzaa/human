@@ -1,8 +1,10 @@
 import express from 'express'
-import { addEmployee } from '../controllers/empController.js'
+import { addEmployee, getEmployees } from '../controllers/empController.js'
+import authMiddleware from '../middlewares/authMiddleware.js'
 
 const router = express.Router()
 
-router.post('/add', addEmployee)
+router.get('/list', getEmployees)
+router.post('/add', authMiddleware, addEmployee)
 
 export default router;

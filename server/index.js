@@ -18,12 +18,10 @@ app.use(express.json());
 //For department
 app.use('/api/auth', router);
 app.use('/api/department', departmentRouter)
-app.use('/department/list', departmentRouter)
-app.use('/department/delete', departmentRouter)
-app.use('/department/update:id', departmentRouter)
+
 
 //For employees
-app.use('/employee/add', employeeRouter)
+app.use('/api/employee', employeeRouter)
 
 // Connect to the database and then start the server
 const startServer = async () => {

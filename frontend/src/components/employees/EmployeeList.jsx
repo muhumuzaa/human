@@ -1,6 +1,27 @@
-import EmployeeForm from "./EmployeeForm";
+import { useEffect, useState } from "react";
+// import EmployeeForm from "./EmployeeForm";
+import axios from "axios";
 
 const EmployeeList = () => {
+
+    // const [showForm, setShowForm] = useState(null)
+    const [employees, setEmployees] = useState([])
+
+    useEffect(() =>{
+        const fetchEmployees = async() =>{
+            try{
+                const response = await axios.get('http://localhost:3000/api/employee/list')
+                if(response.data.success){
+                    setEmployees(response.data.employees)
+                }
+            }catch(error){
+                if(error.response && !error.response.data.success){
+                    console.log(error.response.data.error)
+                }
+            }
+        }
+        fetchEmployees()
+    }, [employees])
   return (
     <div className="relative">
       <div>
@@ -16,7 +37,10 @@ const EmployeeList = () => {
           </button>
         </div>
         <div>
-            <EmployeeForm />
+            {/* <EmployeeForm /> */}
+            { employees.map((emp) =>(
+                <p key={emp._id}>{emp.emp_name}</p>
+            ))}
         </div>
       </div>
 

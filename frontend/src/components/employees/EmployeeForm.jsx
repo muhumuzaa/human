@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import { useDepartments } from "../../context/DepartmentContext";
 
 const EmployeeForm = () => {
   const [employee, setEmployee] = useState({
@@ -9,18 +10,18 @@ const EmployeeForm = () => {
     department: "",
     salary: "",
   });
-
+  const { depList } = useDepartments();
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEmployee({ ...employee, [name]: value });
   };
-
+  
   const handleEditorCreateEmployee = async (e) => {
     e.preventDefault();
-
     try {
+        
       const response = await axios.post(
-        "http://localhost:3000/api/employees/add",
+        "http://localhost:3000/api/employee/add",
         employee,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -32,16 +33,18 @@ const EmployeeForm = () => {
       }
     } catch (error) {
       if (error.response && !error.response.data.success) {
-        console.log("Error Creating employee", error.response.data.error);
+        alert(error.response.data.error);
       } else {
-        console.log("Server error");
+        alert("Server error while creating employee");
       }
     }
   };
 
   return (
     <div className="bg-white w-[26rem] mx-auto rounded-lg p-4 shadow-lg">
-      <h3 className="">Add New Employee</h3>
+      <h3 className="text-xl text-gray-700 font-semibold mb-4">
+        Add New Employee
+      </h3>
       <form onSubmit={handleEditorCreateEmployee}>
         <div className="mb-4">
           <label htmlFor="emp_name" className="block">
@@ -85,13 +88,22 @@ const EmployeeForm = () => {
           <label htmlFor="department" className="pr-4">
             Department
           </label>
-
           <select
             onChange={handleInputChange}
             value={employee.department}
+            name="department"
             className="border border-gray-300 rounded-lg px-2"
           >
-            <option value='' >Select</option>
+            <option value="">Select</option>
+            {depList.length > 0 ? (
+              depList.map((dep) => (
+                <option key={dep._id} value={dep._id}>
+                  {dep.dep_name}
+                </option>
+              ))
+            ) : (
+              <option disabled>No Departments Available</option>
+            )}
           </select>
         </div>
 
