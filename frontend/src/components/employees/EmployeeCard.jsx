@@ -3,7 +3,7 @@ const EmployeeCard = ({employee}) => {
     <div className="border-b border-gray-200 py-2 flex justify-between">
       <div className="space-x-4 flex">
         <div className="rounded-full w-12 h-12 bg-gray-400 overflow-hidden">
-            <img src={employee.image || "https://images.unsplash.com/photo-1595152772835-219674b2a8a6?w=200&h=300&fit=crop"} alt="" className="w-full object-cover h-full"/>
+            <img src={employee.image?.startsWith('http')? employee.image : `http://localhost:3000${employee.image}` } alt="" className="w-full object-cover h-full"/>
         </div>
         <div className="flex flex-col">
           <span className="block text-gray-700 font-semibold">{employee.emp_name}</span>

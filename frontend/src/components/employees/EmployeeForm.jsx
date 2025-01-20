@@ -36,7 +36,7 @@ const EmployeeForm = ({ onCancel }) => {
       formData.append("department", employee.department);
       formData.append("salary", employee.salary);
       if(imageFile){
-        formData.append("image", employee.imageFile)
+        formData.append("image", imageFile)
       }
       
 
@@ -44,12 +44,15 @@ const EmployeeForm = ({ onCancel }) => {
         "http://localhost:3000/api/employee/add",
         formData,
         {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` ,
+        "Content-Type": "multipart/form-data"
+        },
         }
       );
       if (response.data.success) {
         console.log("Employee successfully created: ", response.data);
         alert("Employee successfully created");
+        onCancel()
       }
     } catch (error) {
       if (error.response && !error.response.data.success) {
@@ -140,7 +143,7 @@ const EmployeeForm = ({ onCancel }) => {
             Salary
           </label>
           <input
-            type="money"
+            type="number"
             name="salary"
             onChange={handleInputChange}
             value={employee.salary}
@@ -156,7 +159,7 @@ const EmployeeForm = ({ onCancel }) => {
             name="image"
             accept="image/*"
             onChange={handleFileChange}
-            value={employee.image}
+           
             className="p-2 border border-gray-200 rounded-xl w-full"
           />
         </div>

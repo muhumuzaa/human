@@ -102,7 +102,8 @@ const addEmployee = async (req, res) => {
         });
       } else {
         // Single employee addition logic
-        const { emp_name, email, tel, salary, department, image } = req.body;
+        const { emp_name, email, tel, salary, department} = req.body;
+        const image = req.file ? req.file.filename : null;
         if(typeof image !== 'string'){
             return res.status(404).json({success: false, error: 'Invalid image format'})
         }
@@ -150,7 +151,7 @@ const addEmployee = async (req, res) => {
           tel,
           salary,
           department,
-          image: imageFile
+          image: imageFile ? `/uploads/${image}` : null
         });
   
         await newEmployee.save();

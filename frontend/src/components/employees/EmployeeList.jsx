@@ -63,7 +63,7 @@ const EmployeeList = () => {
 
                 {/* Form */}
                 <div className="relative z-20">
-                    <EmployeeForm onCancel = {handleFormClose}/>
+                    <EmployeeForm onCancel = {handleFormClose} />
                 </div>
             </div>
         )
