@@ -1,4 +1,4 @@
-const EmployeeCard = ({employee}) => {
+const EmployeeCard = ({employee, editEmployee}) => {
   return (
     <div className="border-b border-gray-200 py-2 grid grid-cols-10 items-center gap-4 w-full">
       <div className="col-span-4 space-x-4 flex">
@@ -17,7 +17,7 @@ const EmployeeCard = ({employee}) => {
 
       <span className="col-span-1 text-sm text-gray-700">{new Date(employee.createdAt).toLocaleDateString()}</span>
       <div className="col-span-2 space-x-6">
-        <button className="text-xs border border-green-500 rounded-lg px-2 py-1 hover:bg-gray-200" onClick={() =>editEmployee(employee._id)}>Edit</button>
+        <button className="text-xs border border-green-500 rounded-lg px-2 py-1 hover:bg-gray-200" onClick={() =>editEmployee(employee)}>Edit</button>
         <button className="text-xs border border-red-500 rounded-lg px-2 py-1 hover:bg-gray-200">Delete</button>
       </div>
     </div>

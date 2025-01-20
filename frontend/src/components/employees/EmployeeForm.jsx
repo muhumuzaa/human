@@ -1,21 +1,42 @@
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDepartments } from "../../context/DepartmentContext";
 import { FaXmark } from "react-icons/fa6";
 
-const EmployeeForm = ({ onSave, onCancel }) => {
+const EmployeeForm = ({ onSave, onCancel, editingEmployee }) => {
   const [employee, setEmployee] = useState({
     emp_name: "",
     email: "",
     tel: "",
     department: "",
     salary: "",
-    
   });
-  
+
+  useEffect(() => {
+    if (editingEmployee) {
+      setEmployee({
+        emp_name: editingEmployee.emp_name || "",
+        email: editingEmployee.email || "",
+        tel: editingEmployee.tel || "",
+        department: editingEmployee.department || "",
+        salary: editingEmployee.salary || "",
+      });
+      setImageFile(null); //set to null on editing
+
+    } else {
+      setEmployee({
+        emp_name: "",
+        email: "",
+        tel: "",
+        department: "",
+        salary: "",
+      });
+      setImageFile(null)
+    }
+  }, [editingEmployee]);
+
   const { depList } = useDepartments();
 
-  const [imageFile, setImageFile] = useState(null)
+  const [imageFile, setImageFile] = useState(null);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -23,32 +44,28 @@ const EmployeeForm = ({ onSave, onCancel }) => {
   };
 
   const handleFileChange = (e) => {
-    setImageFile(e.target.files[0] );
+    setImageFile(e.target.files[0]);
   };
 
-  const handleEditorCreateEmployee = async (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
 
-  
-      const formData = new FormData();
-      formData.append("emp_name", employee.emp_name);
-      formData.append("email", employee.email);
-      formData.append("tel", employee.tel);
-      formData.append("department", employee.department);
-      formData.append("salary", employee.salary);
-      if(imageFile){
-        formData.append("image", imageFile)
-      }
-      
-      onSave(formData)
-      
+    const formData = new FormData();
+    Object.keys(employee).forEach((key) => {
+      formData.append(key, employee[key]);
+    });
+    if (imageFile) {
+      formData.append("image", imageFile);
+    }
+
+    onSave(formData);
   };
 
   return (
     <div className="bg-white w-[26rem] mx-auto rounded-lg p-4 shadow-lg">
       <div className="flex justify-between">
         <span className="text-xl font-semibold text-gray-700 mb-6 block">
-          Add Employee
+          {editingEmployee ? "Update Employee" : "Add Employee"}
         </span>
         <div
           onClick={onCancel}
@@ -57,7 +74,7 @@ const EmployeeForm = ({ onSave, onCancel }) => {
           <FaXmark className="text-gray-300 hover:text-gray-500" />
         </div>
       </div>
-      <form onSubmit={handleEditorCreateEmployee}>
+      <form onSubmit={handleSave}>
         <div className="mb-4">
           <label htmlFor="emp_name" className="block">
             Name
@@ -140,7 +157,6 @@ const EmployeeForm = ({ onSave, onCancel }) => {
             name="image"
             accept="image/*"
             onChange={handleFileChange}
-           
             className="p-2 border border-gray-200 rounded-xl w-full"
           />
         </div>
@@ -156,7 +172,7 @@ const EmployeeForm = ({ onSave, onCancel }) => {
             type="submit"
             className="bg-indigo-500 hover:bg-indigo-700 py-1 px-3 rounded-xl text-slate-50"
           >
-            Create Employee
+            {editingEmployee ? "Update Employee" : "Create Employee"}
           </button>
         </div>
       </form>
