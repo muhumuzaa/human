@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 
 const getEmployees = async (req, res) => {
   try {
-    const employees = await Employee.find();
+    const employees = await Employee.find().populate('department', 'dep_name');
     if (!employees || employees.length === 0) {
       return res
         .status(404)

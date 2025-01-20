@@ -1,9 +1,9 @@
-import axios from "axios";
+
 import { useState } from "react";
 import { useDepartments } from "../../context/DepartmentContext";
 import { FaXmark } from "react-icons/fa6";
 
-const EmployeeForm = ({ onCancel }) => {
+const EmployeeForm = ({ onSave, onCancel }) => {
   const [employee, setEmployee] = useState({
     emp_name: "",
     email: "",
@@ -12,6 +12,7 @@ const EmployeeForm = ({ onCancel }) => {
     salary: "",
     
   });
+  
   const { depList } = useDepartments();
 
   const [imageFile, setImageFile] = useState(null)
@@ -28,7 +29,7 @@ const EmployeeForm = ({ onCancel }) => {
   const handleEditorCreateEmployee = async (e) => {
     e.preventDefault();
 
-    try {
+  
       const formData = new FormData();
       formData.append("emp_name", employee.emp_name);
       formData.append("email", employee.email);
@@ -39,28 +40,8 @@ const EmployeeForm = ({ onCancel }) => {
         formData.append("image", imageFile)
       }
       
-
-      const response = await axios.post(
-        "http://localhost:3000/api/employee/add",
-        formData,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` ,
-        "Content-Type": "multipart/form-data"
-        },
-        }
-      );
-      if (response.data.success) {
-        console.log("Employee successfully created: ", response.data);
-        alert("Employee successfully created");
-        onCancel()
-      }
-    } catch (error) {
-      if (error.response && !error.response.data.success) {
-        alert(error.response.data.error);
-      } else {
-        alert("Server error while creating employee");
-      }
-    }
+      onSave(formData)
+      
   };
 
   return (
