@@ -10,16 +10,19 @@ const EmployeeForm = ({ onCancel }) => {
     tel: "",
     department: "",
     salary: "",
-    image: null,
+    
   });
   const { depList } = useDepartments();
+
+  const [imageFile, setImageFile] = useState(null)
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEmployee({ ...employee, [name]: value });
   };
 
   const handleFileChange = (e) => {
-    setEmployee({ ...employee, image: e.target.files[0] });
+    setImageFile(e.target.files[0] );
   };
 
   const handleEditorCreateEmployee = async (e) => {
@@ -32,13 +35,14 @@ const EmployeeForm = ({ onCancel }) => {
       formData.append("tel", employee.tel);
       formData.append("department", employee.department);
       formData.append("salary", employee.salary);
-      if (employee.image) {
-        formData.append("image", employee.image);
+      if(imageFile){
+        formData.append("image", employee.imageFile)
       }
+      
 
       const response = await axios.post(
         "http://localhost:3000/api/employee/add",
-        employee,
+        formData,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
@@ -152,6 +156,7 @@ const EmployeeForm = ({ onCancel }) => {
             name="image"
             accept="image/*"
             onChange={handleFileChange}
+            value={employee.image}
             className="p-2 border border-gray-200 rounded-xl w-full"
           />
         </div>

@@ -35,7 +35,7 @@ const addEmployee = async (req, res) => {
         const errors = [];
         const employees = [];
         for (const emp of req.body) {
-          const { emp_name, email, tel, salary, department } = emp;
+          const { emp_name, email, tel, salary, department, image } = emp;
   
           // Validate required fields
           if (!emp_name || !email || !department) {
@@ -86,6 +86,7 @@ const addEmployee = async (req, res) => {
             tel,
             salary,
             department,
+            image
           });
   
           const savedEmployee = await newEmployee.save();
@@ -101,8 +102,10 @@ const addEmployee = async (req, res) => {
         });
       } else {
         // Single employee addition logic
-        const { emp_name, email, tel, salary, department } = req.body;
-  
+        const { emp_name, email, tel, salary, department, image } = req.body;
+        if(typeof image !== 'string'){
+            return res.status(404).json({success: false, error: 'Invalid image format'})
+        }
         // Validate required fields
         if (!emp_name || !email || !department) {
           return res.status(400).json({
@@ -136,6 +139,9 @@ const addEmployee = async (req, res) => {
             error: "This email has already been used. Use a new email.",
           });
         }
+
+        //check image validity
+        const imageFile = req.file ? `/uploads/${req.file.filename}`: null
   
         // Create new employee
         const newEmployee = new Employee({
@@ -144,6 +150,7 @@ const addEmployee = async (req, res) => {
           tel,
           salary,
           department,
+          image: imageFile
         });
   
         await newEmployee.save();

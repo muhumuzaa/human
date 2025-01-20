@@ -14,6 +14,9 @@ app.use(cors());
 // Parse incoming requests with JSON payloads
 app.use(express.json());
 
+//for file uploads in employee form. To serve uploaded files from the "uploads" directory
+app.use("/uploads", express.static("uploads"));
+
 // Use the correct route for authentication
 //For department
 app.use('/api/auth', router);

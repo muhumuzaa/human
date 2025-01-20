@@ -6,6 +6,7 @@ const employeeSchema = mongoose.Schema({
     tel: {type: String},
     department: {type: mongoose.Schema.Types.ObjectId, ref: 'Department', required: true},
     salary: {type: String, required: true},
+    image: {type: String}
     
 }, {timestamps: true})
 
