@@ -70,12 +70,18 @@ const EmployeeList = () => {
             },
           }
         );
+        console.log('upading object: ', formData)
         if(response.data.success){
             const updatedEmployee = response.data.employee;
 
             setEmployees((prev) =>(
                 prev.map((emp) => emp._id ===updatedEmployee._id ? updatedEmployee: emp)
             ))
+            setFilteredEmployees((prev) =>
+                prev.map((emp) => 
+                  emp._id === updatedEmployee._id ? updatedEmployee : emp
+                )
+              );
             alert('Employee update successful')
             
         }

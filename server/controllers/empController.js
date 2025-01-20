@@ -169,4 +169,30 @@ const addEmployee = async (req, res) => {
       });
     }}
 
-export { addEmployee, getEmployees };
+
+    const updateEmployee = async(req, res) =>{
+        try{
+            const {id} =  req.params;
+            console.log('id from params: ', id)
+            const {emp_name, email, tel, department, salary} = req.body
+            console.log('body is: ', req.body)
+            if(!emp_name || !email || !department || !salary){
+                return res.status(404).json({success: false, error: 'Required fields are missing'})
+            }
+            if(!id){
+                return res.status(404).json({success: false, error: 'No Id provided when updating'})
+            }
+            const employeeToUpdate = await Employee.findByIdAndUpdate(id, {emp_name, email, tel, department, salary}, {new: true});
+            if(!employeeToUpdate){
+                
+                return res.status(404).json({success: false, error: 'Employee wasnot found'})
+            }
+            
+            return res.status(201).json({success: true, message: `Employee ${id} updated successfuly`, employee:employeeToUpdate})
+        }catch(error){
+            return res.status(500).json({success: false, error: 'Server error updating employee'})
+        }
+        
+    }
+
+export { addEmployee, getEmployees, updateEmployee };
