@@ -198,12 +198,12 @@ const addEmployee = async (req, res) => {
 
     const deleteEmployee = async(req, res) =>{
         try{
-            const {id} = req.params
+            const {id} = req.query
         if(!id){
             return res.status(404).json({success: false, error: 'No id provided'})
         }
-        const employeeToDelele = await Employee.findByIdAndUpdate(id)
-        if(employeeToDelele){
+        const employeeToDelele = await Employee.findByIdAndDelete(id)
+        if(!employeeToDelele){
             return res.status(404).json({success: false, error: 'Employee to delete was not found'})
         }
         return res.status(200).json({success: true, error: `Successfully deleted employee - ${employeeToDelele.emp_name}`})

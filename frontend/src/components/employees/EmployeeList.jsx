@@ -6,11 +6,9 @@ import EmployeeCard from "./EmployeeCard";
 const EmployeeList = () => {
   const [showForm, setShowForm] = useState(false);
   const [employees, setEmployees] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  
+  const [searchTerm, setSearchTerm] = useState("");
+
   const [editingEmployee, setEditingEmployeee] = useState(null);
-
-
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -30,9 +28,9 @@ const EmployeeList = () => {
     fetchEmployees();
   }, []);
 
-  const filteredEmployees = employees.filter((emp) =>(
+  const filteredEmployees = employees.filter((emp) =>
     emp.emp_name.toLowerCase().includes(searchTerm.toLowerCase())
-  ))
+  );
 
   // Filter employees based on search term
   const handleSearch = (e) => {
@@ -40,7 +38,7 @@ const EmployeeList = () => {
     setSearchTerm(value);
   };
 
-  const handleFormOpen = ( employee = null) => {
+  const handleFormOpen = (employee = null) => {
     setEditingEmployeee(employee);
     setShowForm(true);
   };
@@ -64,19 +62,19 @@ const EmployeeList = () => {
             },
           }
         );
-        console.log('upading object: ', formData)
-        if(response.data.success){
-            const updatedEmployee = response.data.employee;
+        console.log("upading object: ", formData);
+        if (response.data.success) {
+          const updatedEmployee = response.data.employee;
 
-            setEmployees((prev) =>(
-                prev.map((emp) => emp._id ===updatedEmployee._id ? updatedEmployee: emp)
-            ))
-           
-            alert('Employee update successful')
-            
+          setEmployees((prev) =>
+            prev.map((emp) =>
+              emp._id === updatedEmployee._id ? updatedEmployee : emp
+            )
+          );
+
+          alert("Employee update successful");
         }
       } else {
-
         //Creating new employee
         const response = await axios.post(
           "http://localhost:3000/api/employee/add",
@@ -89,10 +87,9 @@ const EmployeeList = () => {
           }
         );
         if (response.data.success) {
-          setEmployees(prev =>[...prev, response.data.employee])
-          
+          setEmployees((prev) => [...prev, response.data.employee]);
+
           alert("Employee successfully created");
-          
         }
       }
       handleFormClose();
@@ -105,23 +102,28 @@ const EmployeeList = () => {
     }
   };
 
-  const handleDeleteEmployee = async(id) =>{
-    try{
-        const response = await axios.delete('http://localhost:3000/api/employee/delete', {params: id}, {headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}})
-        if(response.data.success){
-            alert('Employee successfully deleted')
-            setEmployees((prev) => (prev.filter((emp) => emp._id !== id)))
+  const handleDeleteEmployee = async (id) => {
+    try {
+      const response = await axios.delete(
+        "http://localhost:3000/api/employee/delete",
+        {
+            params: {id},
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
-    }catch(error){
-        if(error.response && !error.response.data.success){
-            alert('Error deleting employee', error.response.data.error)
-        }else{
-            alert('Server error deleting employee')
-        }
+      );
+      
+      if (response.data.success) {
+        alert("Employee successfully deleted");
+        setEmployees((prev) => prev.filter((emp) => emp._id !== id));
+      }
+    } catch (error) {
+      if (error.response && !error.response.data.success) {
+        alert(error.response.data.error);
+      } else {
+        alert("Server error deleting employee");
+      }
     }
-    
-
-  }
+  };
 
   return (
     <div className="relative">
@@ -139,7 +141,7 @@ const EmployeeList = () => {
           />
           <button
             className="bg-indigo-600 hover:bg-indigo-700 text-slate-50 rounded-lg py-1 px-2"
-            onClick={() =>handleFormOpen()}
+            onClick={() => handleFormOpen()}
           >
             Add Employee
           </button>
@@ -147,7 +149,12 @@ const EmployeeList = () => {
         <div className="bg-white rounded-xl p-6 mt-4">
           {filteredEmployees.length > 0 ? (
             filteredEmployees.map((emp) => (
-              <EmployeeCard key={emp._id} employee={emp} editEmployee={handleFormOpen} deleteEmployee ={handleDeleteEmployee}/>
+              <EmployeeCard
+                key={emp._id}
+                employee={emp}
+                editEmployee={handleFormOpen}
+                deleteEmployee={handleDeleteEmployee}
+              />
             ))
           ) : (
             <p>No Employee data</p>
@@ -166,11 +173,10 @@ const EmployeeList = () => {
 
           {/* Form */}
           <div className="relative z-20">
-            
             <EmployeeForm
               onCancel={handleFormClose}
               onSave={handleEditorCreateEmployee}
-              editingEmployee = {editingEmployee} //how the employee object comes from the EmployeeCard to the EmployeList through useState hook to the EmployeeForm
+              editingEmployee={editingEmployee} //how the employee object comes from the EmployeeCard to the EmployeList through useState hook to the EmployeeForm
             />
           </div>
         </div>
