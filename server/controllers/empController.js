@@ -2,6 +2,7 @@ import { response } from "express";
 import { Department } from "../models/Department.js";
 import Employee from "../models/Employee.js";
 import mongoose from "mongoose";
+import { error } from "console";
 
 const getEmployees = async (req, res) => {
   try {
@@ -182,7 +183,7 @@ const addEmployee = async (req, res) => {
             if(!id){
                 return res.status(404).json({success: false, error: 'No Id provided when updating'})
             }
-            const employeeToUpdate = await Employee.findByIdAndUpdate(id, {emp_name, email, tel, department, salary}, {new: true});
+            const employeeToUpdate = await Employee.findByIdAndUpdate(id, {emp_name, email, tel, department, salary}, {new: true}).populate('department');
             if(!employeeToUpdate){
                 
                 return res.status(404).json({success: false, error: 'Employee wasnot found'})
@@ -195,4 +196,24 @@ const addEmployee = async (req, res) => {
         
     }
 
-export { addEmployee, getEmployees, updateEmployee };
+    const deleteEmployee = async(req, res) =>{
+        try{
+            const {id} = req.params
+        if(!id){
+            return res.status(404).json({success: false, error: 'No id provided'})
+        }
+        const employeeToDelele = await Employee.findByIdAndUpdate(id)
+        if(employeeToDelele){
+            return res.status(404).json({success: false, error: 'Employee to delete was not found'})
+        }
+        return res.status(200).json({success: true, error: `Successfully deleted employee - ${employeeToDelele.emp_name}`})
+
+
+        }catch(error){
+            console.error(error)
+            return res.status(404).json({success: false, error: 'Server error deleting employee'})
+        }
+        
+    }
+
+export { addEmployee, getEmployees, updateEmployee,deleteEmployee };

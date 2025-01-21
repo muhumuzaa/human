@@ -12,7 +12,6 @@ const DepartmentList = () => {
     depList,
     error,
     loading,
-    fetchDepartments,
     deleteDepartment,
     addOrEditDepartment,
   } = useDepartments();
