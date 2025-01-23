@@ -30,5 +30,9 @@ const verify = (req, res) =>{
     return res.status(200).json({success: true, user: req.user})
 }
 
+const Logout = async() =>{
+    
+}
+
 
 export {Login, verify};

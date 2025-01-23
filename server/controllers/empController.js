@@ -104,7 +104,7 @@ const addEmployee = async (req, res) => {
       } else {
         // Single employee addition logic
         const { emp_name, email, tel, salary, department} = req.body;
-        const image = req.file ? req.file.filename : null;
+        const image = req.file ? req.file.filename : '';
         if(typeof image !== 'string'){
             return res.status(404).json({success: false, error: 'Invalid image format'})
         }
@@ -174,16 +174,30 @@ const addEmployee = async (req, res) => {
     const updateEmployee = async(req, res) =>{
         try{
             const {id} =  req.params;
-            console.log('id from params: ', id)
             const {emp_name, email, tel, department, salary} = req.body
-            console.log('body is: ', req.body)
+
             if(!emp_name || !email || !department || !salary){
-                return res.status(404).json({success: false, error: 'Required fields are missing'})
+                return res.status(400).json({success: false, error: 'Required fields are missing'})
             }
+
+
             if(!id){
-                return res.status(404).json({success: false, error: 'No Id provided when updating'})
+                return res.status(400).json({success: false, error: 'No Id provided when updating'})
             }
-            const employeeToUpdate = await Employee.findByIdAndUpdate(id, {emp_name, email, tel, department, salary}, {new: true}).populate('department');
+            
+            const departmentId = typeof department === "object" ? department._id : department;
+            //valid dep if
+            if(!mongoose.Types.ObjectId.isValid(departmentId)){
+              return res.status(400).json({success: false, error: 'Dept id is invalid'})
+            }
+
+            //if dept exists
+            const depExists = await Department.findById(department);
+            if(!depExists){
+              return res.status(404).json({success: false, error: 'Dept doesnot exist'})
+            }
+
+            const employeeToUpdate = await Employee.findByIdAndUpdate(id, {emp_name, email, tel, department: departmentId, salary}, {new: true}).populate('department');
             if(!employeeToUpdate){
                 
                 return res.status(404).json({success: false, error: 'Employee wasnot found'})

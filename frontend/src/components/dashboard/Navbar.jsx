@@ -20,7 +20,7 @@ const Navbar = () => {
             <img src="man.jpg" alt="man" className="w-full h-full object-cover"/>
           </div>
           <span className="flex flex-col">
-            <span>Ambroze Kweronda</span>
+            <span>Ambroze Muhumuza</span>
             <span className="text-xs text-gray-600 -mt-1">Engineer</span>
           </span>
         </div>

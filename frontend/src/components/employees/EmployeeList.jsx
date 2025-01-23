@@ -34,8 +34,7 @@ const EmployeeList = () => {
 
   // Filter employees based on search term
   const handleSearch = (e) => {
-    const value = e.target.value.toLowerCase();
-    setSearchTerm(value);
+    setSearchTerm(e.target.value.toLowerCase());
   };
 
   const handleFormOpen = (employee = null) => {
@@ -103,6 +102,10 @@ const EmployeeList = () => {
   };
 
   const handleDeleteEmployee = async (id) => {
+    console.log("Attempting to delete employee with ID:", id);
+
+    const confirmDelete = window.confirm(`Are you sure you want to delete record?`)
+    if(!confirmDelete)return
     try {
       const response = await axios.delete(
         "http://localhost:3000/api/employee/delete",
@@ -115,6 +118,7 @@ const EmployeeList = () => {
       if (response.data.success) {
         alert("Employee successfully deleted");
         setEmployees((prev) => prev.filter((emp) => emp._id !== id));
+        handleFormClose()
       }
     } catch (error) {
       if (error.response && !error.response.data.success) {
@@ -177,6 +181,7 @@ const EmployeeList = () => {
               onCancel={handleFormClose}
               onSave={handleEditorCreateEmployee}
               editingEmployee={editingEmployee} //how the employee object comes from the EmployeeCard to the EmployeList through useState hook to the EmployeeForm
+              deleteEmployee={handleDeleteEmployee}
             />
           </div>
         </div>

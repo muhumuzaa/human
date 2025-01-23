@@ -11,7 +11,7 @@ const EmployeeCard = ({employee, editEmployee, deleteEmployee}) => {
         </div>
       </div>
 
-      <div className="col-span-3 rounded-lg border border-indigo-600 bg-indigo-100 text-indigo-600 text-xs px-2 py-1">
+      <div className="col-span-3 rounded-lg bg-indigo-100 text-indigo-600 text-xs px-2 py-1">
         {employee.department.dep_name}
       </div>
 

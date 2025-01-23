@@ -7,6 +7,7 @@ import { useDepartments } from "../../context/DepartmentContext";
 const DepartmentList = () => {
   const [showDepForm, setShowDepForm] = useState(false);
   const [editDept, setEditDept] = useState(null);
+  const [searchTerm, setsearchTerm] = useState('')
 
   const {
     depList,
@@ -26,6 +27,19 @@ const DepartmentList = () => {
     setShowDepForm(false);
   };
 
+  const handleFiltering = (e) =>{
+    setsearchTerm(e.target.value)
+  }
+
+  const filteredDeps = depList.filter((dep) =>(
+    dep.dep_name.toLowerCase().includes(searchTerm.toLowerCase())
+  ))
+
+
+ 
+
+  
+
   if (loading) return <p>Loading ...</p>;
   if (error) return <p>Error: {error}</p>;
 
@@ -38,6 +52,7 @@ const DepartmentList = () => {
           <input
             placeholder="Search by Department Name"
             className="p-2 border border-gray-300 rounded"
+            onChange={handleFiltering}
           />
           <button
             className="bg-indigo-600 hover:bg-indigo-700 text-slate-50 rounded-lg py-1 px-2"
@@ -47,7 +62,7 @@ const DepartmentList = () => {
           </button>
         </div>
         <div className="mb-4 bg-white rounded-lg p-4">
-          {depList.map((dep) => (
+          {filteredDeps.map((dep) => (
             <DepartmentCard
               key={dep._id}
               department={dep}

@@ -1,8 +1,15 @@
+import { useNavigate } from "react-router-dom";
 
 
-const InfoCard = ({icon: Icon, bigtitle, smallTitle, bgColor ='bg-orange-700', iconColor ='text-orange-500', borderType}) => {
+const InfoCard = ({icon: Icon, bigtitle, smallTitle, bgColor ='bg-orange-700', iconColor ='text-orange-500', borderType, navigateTo}) => {
+  const naviagate = useNavigate()
+  const handleClick = () =>{
+    if(navigateTo){
+      naviagate(navigateTo)
+    }
+  }
   return (
-    <div className="flex space-x-2">
+    <div className="flex space-x-2" onClick={handleClick}>
       <span className={`${bgColor} w-8 h-8 rounded-full`}>
         {Icon && <Icon className={`text-xl ${iconColor}`}/>}
       </span>

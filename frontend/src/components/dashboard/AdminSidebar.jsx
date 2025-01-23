@@ -7,15 +7,25 @@ import {
 import {
   FaBuilding,
   FaCamera,
-  FaFaceMehBlank,
+  FaDownload,
   FaKey,
-  FaKeybase,
   FaPeopleGroup,
   FaPhone,
+  FaUpload,
 } from "react-icons/fa6";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const AdminSidebar = () => {
+
+  const {logout} = useAuth()
+  const navigate = useNavigate()
+  const handleLogout = async() =>{
+    
+    logout()
+    navigate('/login')
+    
+  }
   return (
     <div className="flex flex-col justify-between min-h-screen py-8">
       <div>
@@ -119,12 +129,36 @@ const AdminSidebar = () => {
                 : "flex space-x-2 items-center rounded-lg text-gray-700 text-sm hover:text-white hover:bg-indigo-600 py-3 px-2 mb-2"
             }
           >
+            <FaUpload className="" />
+            <span className="">Import data</span>
+          </NavLink>
+
+          <NavLink
+            to={"support"}
+            className={({ isActive }) =>
+              isActive
+                ? "flex space-x-2 items-center rounded-lg text-white text-sm hover:text-white bg-indigo-600 py-3 px-2 mb-2"
+                : "flex space-x-2 items-center rounded-lg text-gray-700 text-sm hover:text-white hover:bg-indigo-600 py-3 px-2 mb-2"
+            }
+          >
+            <FaDownload className="" />
+            <span className="">Export data</span>
+          </NavLink>
+
+          <NavLink
+            to={"support"}
+            className={({ isActive }) =>
+              isActive
+                ? "flex space-x-2 items-center rounded-lg text-white text-sm hover:text-white bg-indigo-600 py-3 px-2 mb-2"
+                : "flex space-x-2 items-center rounded-lg text-gray-700 text-sm hover:text-white hover:bg-indigo-600 py-3 px-2 mb-2"
+            }
+          >
             <FaPhone className="" />
             <span className="">Support</span>
           </NavLink>
         </div>
       </div>
-      <div>
+      <div >
         <NavLink
           to={"/logout"}
           className={({ isActive }) =>
@@ -132,9 +166,10 @@ const AdminSidebar = () => {
               ? "flex space-x-2 items-center rounded-lg text-white text-sm hover:text-white bg-indigo-600 py-3 px-2 mb-2"
               : "flex space-x-2 items-center rounded-lg text-gray-700 text-sm hover:text-white hover:bg-indigo-600 py-3 px-2 mb-2"
           }
+          onClick={handleLogout}
         >
           <FaArrowCircleLeft className="" />
-          <span className="">Log Out</span>
+          <span className="" >Log Out</span>
         </NavLink>
       </div>
     </div>

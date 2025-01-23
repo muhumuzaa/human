@@ -56,14 +56,9 @@ const getDepartments = async (req, res) => {
         .status(404)
         .json({ success: false, error: "No departments found" });
     }
-    if (departments) {
+    
       return res.status(200).json({ success: true, departments });
-    } else {
-      return res.status(404).json({
-        success: false,
-        error: "Error fetching the list of departments",
-      });
-    }
+   
   } catch (error) {
     console.log(error.message);
     return res
@@ -108,9 +103,9 @@ const updateDepartment = async (req, res) => {
         .json({ success: false, error: "Dept id for editing not provided" });
     }
     if (!dep_name || !description) {
-      res
-        .status(404)
-        .json({ success: false, error: "All field shoes be filled" });
+      return res
+        .status(400)
+        .json({ success: false, error: "All field should be filled" });
     }
     const updatedDep = await Department.findByIdAndUpdate(
       id,

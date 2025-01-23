@@ -13,13 +13,16 @@ const DepartmentProvider = ({ children }) => {
     setError(null);
     try {
       const response = await axios.get(
-        "http://localhost:3000/api/department/list"
+        "http://localhost:3000/api/department/list",
+        
       );
 
       if (response.data.success) {
         setDepList(response.data.departments);
       } else {
         setError("Error fetching departments");
+        console.log("FETCH ERROR:", error);
+        console.log("FETCH ERROR RESPONSE:", error.response);
       }
     } catch (error) {
       if (error.response && !error.response.data.success) {
@@ -44,10 +47,10 @@ const DepartmentProvider = ({ children }) => {
         }
       );
       if (response.data.success) {
-        console.log('successfully deleted')
-        
+        console.log("successfully deleted");
+
         setDepList((prev) => prev.filter((dep) => dep._id !== id));
-        alert('Deleted')
+        alert("Deleted");
       } else {
         throw new Error(response.data.error);
       }
@@ -68,10 +71,12 @@ const DepartmentProvider = ({ children }) => {
           `http://localhost:3000/api/department/update/${department._id}`,
           department,
           {
-            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
           }
         );
-  
+
         if (response.data.success) {
           setDepList((prev) =>
             prev.map((dep) =>
@@ -85,10 +90,12 @@ const DepartmentProvider = ({ children }) => {
           "http://localhost:3000/api/department/add",
           department,
           {
-            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
           }
         );
-  
+
         if (response.data.success) {
           setDepList((prev) => [...prev, response.data.department]);
         }
@@ -98,15 +105,24 @@ const DepartmentProvider = ({ children }) => {
       alert(error.response?.data?.error || "Error saving department");
     }
   };
-  
-  
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.log('No token provided')
+    };
     fetchDepartments();
   }, []);
   return (
     <DepartmentContext.Provider
-      value={{ depList, loading, error, fetchDepartments, deleteDepartment, addOrEditDepartment }}
+      value={{
+        depList,
+        loading,
+        error,
+        fetchDepartments,
+        deleteDepartment,
+        addOrEditDepartment,
+      }}
     >
       {children}
     </DepartmentContext.Provider>

@@ -14,8 +14,14 @@ import {
 } from "react-icons/fa";
 import Bargraph from "./dashboard_elements/Bargraph";
 import InfoCardLong from "./dashboard_elements/InfoCardLong";
+import { useDepartments } from "../../context/DepartmentContext";
+
+
 
 const Dashboard = () => {
+
+  const {depList} = useDepartments()
+  
   return (
     <div>
       <div className="flex justify-between rounded-lg border-2 border-white px-4 py-6 bg-slate-50 mt-6 ">
@@ -24,14 +30,16 @@ const Dashboard = () => {
           smallTitle={"Total Employees"}
           bigtitle="189"
           borderType={"border-r"}
+          navigateTo={'/admin-dashboard/departments'}
         />
         <InfoCard
           icon={FaEarthAfrica}
           smallTitle="Total Departments"
-          bigtitle="7"
+          bigtitle={depList.length}
           bgColor="bg-green-600"
           iconColor="text-green-400"
           borderType={"border-r"}
+        navigateTo='/admin-dashboard/employees'
         />
         <InfoCard
           icon={FaBatteryThreeQuarters}
@@ -62,7 +70,7 @@ const Dashboard = () => {
                       mix-blend-multiply opacity-60 pointer-events-none z-5"
           />
           <span className="font-semibold text-sm text-white">
-            Employee Highlight
+            Employee Spotlight
           </span>
           <div className="rounded-full w-full h-32 bg-gray-400 overflow-clip shadow-lg my-4 z-10">
             <img
