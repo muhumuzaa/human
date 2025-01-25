@@ -68,6 +68,7 @@ const EmployeeList = () => {
         console.log("upading object: ", formData);
         if (response.data.success) {
           const updatedEmployee = response.data.employee;
+          console.log('updated employee: ', updatedEmployee)
 
           setEmployees((prev) =>
             prev.map((emp) =>
@@ -92,8 +93,9 @@ const EmployeeList = () => {
         
         if (response.data.success) {
          
-          setEmployees((prev) => [...prev, response.data.employees]);
+          setEmployees((prev) => [...prev, ...response.data.employees]);
           alert("Employee successfully created");
+          console.log('Created employee: ', response.data.employees)
         }
       }
       handleFormClose();
