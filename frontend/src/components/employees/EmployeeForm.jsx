@@ -5,30 +5,36 @@ import { FaTrash, FaTrashAlt } from "react-icons/fa";
 
 const EmployeeForm = ({ onSave, onCancel, editingEmployee, deleteEmployee }) => {
   const [employee, setEmployee] = useState({
-    emp_name: "",
+    name: "",
     email: "",
     tel: "",
     department: "",
     salary: "",
+    password: "",
+    role: ""
   });
-
+  const [imageFile, setImageFile] = useState(null);
   useEffect(() => {
     if (editingEmployee) {
       setEmployee({
-        emp_name: editingEmployee.emp_name || "",
-        email: editingEmployee.email || "",
-        tel: editingEmployee.tel || "",
+        name: editingEmployee.userId.name || "",
+        email: editingEmployee.userId.email || "",
+        tel: editingEmployee.userId.tel || "",
         department: editingEmployee.department._id || "",
         salary: editingEmployee.salary || "",
+        password: "",
+        role: editingEmployee.userId.role || ""
       });
       setImageFile(null); //set to null on editing
     } else {
       setEmployee({
-        emp_name: "",
+        name: "",
         email: "",
         tel: "",
         department: "",
         salary: "",
+        password: "",
+        role: ""
       });
       setImageFile(null);
     }
@@ -36,7 +42,7 @@ const EmployeeForm = ({ onSave, onCancel, editingEmployee, deleteEmployee }) => 
 
   const { depList } = useDepartments();
 
-  const [imageFile, setImageFile] = useState(null);
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -67,7 +73,7 @@ const EmployeeForm = ({ onSave, onCancel, editingEmployee, deleteEmployee }) => 
   };
 
   return (
-    <div className="bg-white w-[32rem] mx-auto rounded-lg shadow-lg">
+    <div className="bg-white w-[40rem] rounded-lg shadow-lg">
       <div className="flex justify-between bg-indigo-200 p-6 rounded-t-lg relative">
         <span className="text-xl font-semibold text-gray-700 mb-6 block">
           {editingEmployee ? "Update Employee" : "Add Employee"}
@@ -84,13 +90,13 @@ const EmployeeForm = ({ onSave, onCancel, editingEmployee, deleteEmployee }) => 
             src={
               imageFile
                 ? URL.createObjectURL(imageFile)
-                : editingEmployee?.image?.startsWith("http")
-                ? editingEmployee.image
-                : editingEmployee?.image
-                ? `http://localhost:3000${editingEmployee.image}`
+                : editingEmployee?.userId.image?.startsWith("http")
+                ? editingEmployee.userId.image
+                : editingEmployee?.userId.image
+                ? `http://localhost:3000${editingEmployee.userId.image}`
                 : "/placeholder.png"
             }
-            alt={employee.emp_name}
+            alt={employee.name}
             className="w-full h-full object-cover"
           />
         </div>
@@ -99,7 +105,7 @@ const EmployeeForm = ({ onSave, onCancel, editingEmployee, deleteEmployee }) => 
         {editingEmployee&&(
           <div>
              <h3 className="text-gray-800 font-semibold text-xl">
-          {editingEmployee.emp_name}
+          {editingEmployee.name}
         </h3>
         <p className="text-gray-700 text-sm w-full">{editingEmployee.email}</p>
           </div>
@@ -108,18 +114,19 @@ const EmployeeForm = ({ onSave, onCancel, editingEmployee, deleteEmployee }) => 
 
         <form onSubmit={handleSave} className=" mt-10">
           <div className="mb-6 flex w-full space-x-4 items-center">
-            <label htmlFor="emp_name " className=" text-gray-600 text-sm flex-shrink-0 min-w-max">
+            {/* name */}
+            <label htmlFor="name " className=" text-gray-600 text-sm flex-shrink-0 min-w-max">
               Full Name
             </label>
             <input
               type="text"
-              name="emp_name"
+              name="name"
               onChange={handleInputChange}
-              value={employee.emp_name}
+              value={employee.name || ""}
               className="p-2 border border-gray-200 rounded-xl flex-grow"
             />
           </div>
-
+          {/* email */}
           <div className="mb-6 flex w-full space-x-4 items-center">
             <label htmlFor="email" className="block text-gray-600 text-sm flex-shrink-0 min-w-max">
               Email
@@ -128,11 +135,29 @@ const EmployeeForm = ({ onSave, onCancel, editingEmployee, deleteEmployee }) => 
               type="text"
               name="email"
               onChange={handleInputChange}
-              value={employee.email}
+              value={employee.email || ""}
               className="p-2 border border-gray-200 rounded-xl w-full flex-grow"
             />
           </div>
-
+          
+          <div className="flex space-x-4">
+            {/* password */}
+          {!editingEmployee &&
+          
+          <div className="mb-6 flex w-full space-x-4 items-center">
+            <label htmlFor="password" className="block text-gray-600 text-sm flex-shrink-0 min-w-max">
+              Password
+            </label>
+            <input
+              type="password"
+              name="password"
+              onChange={handleInputChange}
+              value={employee.password || ""}
+              className="p-2 border border-gray-200 rounded-xl w-full flex-grow"
+            />
+          </div>}
+          
+          {/* tel */}
           <div className="mb-6 flex space-x-4 w-full items-center">
             <label htmlFor="tel" className="block text-gray-600 text-sm flex-shrink-0 min-w-max">
               Telephone
@@ -141,12 +166,28 @@ const EmployeeForm = ({ onSave, onCancel, editingEmployee, deleteEmployee }) => 
               type="phone"
               name="tel"
               onChange={handleInputChange}
-              value={employee.tel}
+              value={employee.tel || ""}
               className="p-2 border border-gray-200 rounded-xl w-full flex-grow"
             />
           </div>
-          <div className="flex justify-between items-center mb-6">
-          <div className="">
+          </div>
+          {/* salary */}
+            <div className="mb-6 flex space-x-4 w-full items-center">
+              <label htmlFor="salary" className="block text-gray-600 text-sm">
+                Salary
+              </label>
+              <input
+                type="number"
+                name="salary"
+                onChange={handleInputChange}
+                value={employee.salary || ""}
+                className="p-2 border border-gray-200 rounded-xl w-full"
+              />
+            </div>
+          
+          <div className="flex space-x-6 items-center mb-6">
+            {/* department */}
+          <div className="space-x-4">
             <label htmlFor="department" className=" text-gray-600 text-sm">
               Department
             </label>
@@ -169,20 +210,27 @@ const EmployeeForm = ({ onSave, onCancel, editingEmployee, deleteEmployee }) => 
             </select>
           </div>
           
-            <div className="">
-              <label htmlFor="salary" className="block text-gray-600 text-sm">
-                Salary
-              </label>
-              <input
-                type="number"
-                name="salary"
-                onChange={handleInputChange}
-                value={employee.salary}
-                className="p-2 border border-gray-200 rounded-xl w-full"
-              />
-            </div>
+           {/* Role */}
+           <div className="space-x-4">
+            <label htmlFor="role" className=" text-gray-600 text-sm">
+              Role
+            </label>
+            <select
+             onChange={handleInputChange}
+             value={employee.role || ""}
+              name="role"
+              className="border border-gray-300 rounded-lg px-2"
+            >
+              <option value="">Select</option>
+              <option value='admin'>Admin</option>
+              <option value='employee'>Employee</option>
+              
+            </select>
+          </div>
+            
             
           </div>
+          {/* image */}
           <div className="mb-4">
               <label htmlFor="image" className="block text-gray-600 text-sm">
                 Upload Image
@@ -203,10 +251,10 @@ const EmployeeForm = ({ onSave, onCancel, editingEmployee, deleteEmployee }) => 
                         src={
                           imageFile
                             ? URL.createObjectURL(imageFile) // Preview selected file
-                            : editingEmployee?.image?.startsWith("http")
-                            ? editingEmployee.image // Use full URL for existing image
-                            : editingEmployee?.image
-                            ? `http://localhost:3000${editingEmployee.image}` // Use backend-hosted image
+                            : editingEmployee?.userId.image?.startsWith("http")
+                            ? editingEmployee.userId.image // Use full URL for existing image
+                            : editingEmployee?.userId.image
+                            ? `http://localhost:3000${editingEmployee.userId.image}` // Use backend-hosted image
                             : `/placeholder.png` // Placeholder for no image
                         }
                         alt={employee.emp_name || "Placeholder"}
@@ -214,7 +262,7 @@ const EmployeeForm = ({ onSave, onCancel, editingEmployee, deleteEmployee }) => 
                       />
                     </div>
                     <span className="mt-2 text-indigo-500 text-sm group-hover:underline">
-                      {imageFile || editingEmployee?.image
+                      {imageFile || editingEmployee?.userId.image
                         ? "Change Image"
                         : "Add Image"}
                     </span>

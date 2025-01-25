@@ -9,7 +9,8 @@ const router = express.Router()
 
 
 router.get('/list', getEmployees)
-router.post('/add', authMiddleware, upload.single('image'), addEmployee)
+router.post('/add', authMiddleware, upload.single('image'), addEmployee )
+//router.post('/add', authMiddleware, upload.single('image'), addMultipleEmployees )
 router.put('/update/:id', authMiddleware, upload.single('image'), updateEmployee)
 router.delete('/delete', authMiddleware, deleteEmployee)
 

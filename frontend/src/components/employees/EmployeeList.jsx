@@ -16,6 +16,7 @@ const EmployeeList = () => {
         const response = await axios.get(
           "http://localhost:3000/api/employee/list"
         );
+        console.log(response.data.employees)
         if (response.data.success) {
           setEmployees(response.data.employees);
         }
@@ -28,14 +29,17 @@ const EmployeeList = () => {
     fetchEmployees();
   }, []);
 
-  const filteredEmployees = employees.filter((emp) =>
-    emp.emp_name.toLowerCase().includes(searchTerm.toLowerCase())
+    // Filter employees based on search term
+    const handleSearch = (e) => {
+      setSearchTerm(e.target.value.toLowerCase());
+    };
+  
+  const filteredEmployees = employees.filter((emp) =>{
+    const name = emp.userId?.name || '';
+    return name.toLowerCase().includes(searchTerm)
+  }
   );
 
-  // Filter employees based on search term
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value.toLowerCase());
-  };
 
   const handleFormOpen = (employee = null) => {
     setEditingEmployeee(employee);
@@ -85,9 +89,10 @@ const EmployeeList = () => {
             },
           }
         );
+        
         if (response.data.success) {
-          setEmployees((prev) => [...prev, response.data.employee]);
-
+         
+          setEmployees((prev) => [...prev, response.data.employees]);
           alert("Employee successfully created");
         }
       }
@@ -102,8 +107,6 @@ const EmployeeList = () => {
   };
 
   const handleDeleteEmployee = async (id) => {
-    console.log("Attempting to delete employee with ID:", id);
-
     const confirmDelete = window.confirm(`Are you sure you want to delete record?`)
     if(!confirmDelete)return
     try {
@@ -121,11 +124,8 @@ const EmployeeList = () => {
         handleFormClose()
       }
     } catch (error) {
-      if (error.response && !error.response.data.success) {
-        alert(error.response.data.error);
-      } else {
-        alert("Server error deleting employee");
-      }
+      console.error("Error deleting employee:", error.response?.data?.error || error.message);
+      alert(error.response?.data?.error || "Server error deleting employee.");
     }
   };
 

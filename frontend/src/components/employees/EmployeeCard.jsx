@@ -3,11 +3,11 @@ const EmployeeCard = ({employee, editEmployee, deleteEmployee}) => {
     <div className="border-b border-gray-200 py-2 grid grid-cols-10 items-center gap-4 w-full">
       <div className="col-span-4 space-x-4 flex">
         <div className="rounded-full w-12 h-12 bg-gray-400 overflow-hidden">
-            <img src={employee.image?.startsWith('http')? employee.image : `http://localhost:3000${employee.image}` } alt="" className="w-full object-cover h-full"/>
+            <img src={employee.userId.image?.startsWith('http')? employee.userId.image : `http://localhost:3000${employee.userId.image}` } alt="" className="w-full object-cover h-full"/>
         </div>
         <div className="flex flex-col">
-          <span className="block text-gray-700 font-semibold">{employee.emp_name}</span>
-          <span className="block text-gray-700 text-xs">{employee.email}</span>
+          <span className="block text-gray-700 font-semibold">{employee.userId.name}</span>
+          <span className="block text-gray-700 text-xs">{employee.userId.email}</span>
         </div>
       </div>
 
