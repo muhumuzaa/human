@@ -208,25 +208,48 @@ const updateEmployee = async (req, res) => {
 };
 
 const deleteEmployee = async (req, res) => {
+  const session = await mongoose.startSession()
+  session.startTransaction()
   try {
     const { id } = req.query;
     if (!id) {
+      await session.abortTransaction()
+      session.endSession()
       return res.status(404).json({ success: false, error: "No id provided" });
-    }
-    const employeeToDelele = await Employee.findByIdAndDelete(id);
+    } 
+  
+    const employeeToDelele = await Employee.findById(id).populate('userId');
     if (!employeeToDelele) {
+      await session.abortTransaction()
+      session.endSession()
       return res
         .status(404)
         .json({ success: false, error: "Employee to delete was not found" });
     }
+    const userToDelete = employeeToDelele.userId._id;
+
+    //delete employee
+    await Employee.findByIdAndDelete(id)
+    //delete user
+    const userDeleteResult = await User.findByIdAndDelete(userToDelete)
+    if(!userDeleteResult){
+      await session.abortTransaction()
+      session.endSession()
+      return res.status(404).json({success: false, error: 'Employee deleted but associated user not deleted'})
+    }
+
+    await session.commitTransaction()
+    session.endSession()
     return res
       .status(200)
       .json({
         success: true,
-        error: `Successfully deleted employee - ${employeeToDelele.emp_name}`,
+        error: `Successfully deleted employee - ${employeeToDelele.emp_name} and their user account`,
       });
   } catch (error) {
-    console.error(error);
+    await session.abortTransaction()
+    session.endSession()
+    console.error('Error deleting employee: ', error.message);
     return res
       .status(404)
       .json({ success: false, error: "Server error deleting employee" });

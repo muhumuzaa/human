@@ -2,13 +2,15 @@ import { useEffect, useState } from "react";
 import EmployeeForm from "./EmployeeForm";
 import axios from "axios";
 import EmployeeCard from "./EmployeeCard";
+import EmployeeDetails from "./EmployeeDetails";
+
 
 const EmployeeList = () => {
   const [showForm, setShowForm] = useState(false);
   const [employees, setEmployees] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-
-  const [editingEmployee, setEditingEmployeee] = useState(null);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [viewMode, setViewMode] = useState('none')
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -42,15 +44,22 @@ const EmployeeList = () => {
 
 
   const handleFormOpen = (employee = null) => {
-    setEditingEmployeee(employee);
+    setSelectedEmployee(employee);
+    setViewMode('edit')
     setShowForm(true);
   };
 
   const handleFormClose = () => {
-    setEditingEmployeee(null);
+    setSelectedEmployee(null);
+    setViewMode('none')
     setShowForm(false);
   };
 
+  const handleViewDetails = (employee) =>{
+    setSelectedEmployee(employee)
+    setViewMode('view')
+    setShowForm(true)
+  }
   const handleEditorCreateEmployee = async (formData) => {
     try {
       if (editingEmployee) {
@@ -131,6 +140,7 @@ const EmployeeList = () => {
     }
   };
 
+  
   return (
     <div className="relative">
       {/* Main content */}
@@ -152,6 +162,7 @@ const EmployeeList = () => {
             Add Employee
           </button>
         </div>
+
         <div className="bg-white rounded-xl p-6 mt-4">
           {filteredEmployees.length > 0 ? (
             filteredEmployees.map((emp) => (
@@ -160,6 +171,7 @@ const EmployeeList = () => {
                 employee={emp}
                 editEmployee={handleFormOpen}
                 deleteEmployee={handleDeleteEmployee}
+                viewDetails ={handleViewDetails}
               />
             ))
           ) : (
@@ -178,14 +190,31 @@ const EmployeeList = () => {
           ></div>
 
           {/* Form */}
+          
+           
           <div className="relative z-20">
-            <EmployeeForm
+            {
+              viewMode === 'edit' &&(
+                <EmployeeForm
               onCancel={handleFormClose}
               onSave={handleEditorCreateEmployee}
-              editingEmployee={editingEmployee} //how the employee object comes from the EmployeeCard to the EmployeList through useState hook to the EmployeeForm
+              selectedEmployee={selectedEmployee} //how the employee object comes from the EmployeeCard to the EmployeList through useState hook to the EmployeeForm
               deleteEmployee={handleDeleteEmployee}
             />
+              )
+            }
+            
+            {
+            viewMode === 'view' && (
+              <EmployeeDetails selectedEmployee = {selectedEmployee} onCancel={handleFormClose} editEmployee={handleFormOpen} deleteEmployee={handleDeleteEmployee}/>
+            )
+          }
           </div>
+            
+            
+          
+         
+          
         </div>
       )}
       <div></div>

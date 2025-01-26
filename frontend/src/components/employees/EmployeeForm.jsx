@@ -3,7 +3,7 @@ import { useDepartments } from "../../context/DepartmentContext";
 import { FaXmark } from "react-icons/fa6";
 import { FaTrash, FaTrashAlt } from "react-icons/fa";
 
-const EmployeeForm = ({ onSave, onCancel, editingEmployee, deleteEmployee }) => {
+const EmployeeForm = ({ onSave, onCancel, selectedEmployee, deleteEmployee }) => {
   const [employee, setEmployee] = useState({
     name: "",
     email: "",
@@ -15,15 +15,15 @@ const EmployeeForm = ({ onSave, onCancel, editingEmployee, deleteEmployee }) => 
   });
   const [imageFile, setImageFile] = useState(null);
   useEffect(() => {
-    if (editingEmployee) {
+    if (selectedEmployee) {
       setEmployee({
-        name: editingEmployee.userId.name || "",
-        email: editingEmployee.userId.email || "",
-        tel: editingEmployee.userId.tel || "",
-        department: editingEmployee.department._id || "",
-        salary: editingEmployee.salary || "",
+        name: selectedEmployee.userId.name || "",
+        email: selectedEmployee.userId.email || "",
+        tel: selectedEmployee.userId.tel || "",
+        department: selectedEmployee.department._id || "",
+        salary: selectedEmployee.salary || "",
         password: "",
-        role: editingEmployee.userId.role || ""
+        role: selectedEmployee.userId.role || ""
       });
       setImageFile(null); //set to null on editing
     } else {
@@ -38,7 +38,7 @@ const EmployeeForm = ({ onSave, onCancel, editingEmployee, deleteEmployee }) => 
       });
       setImageFile(null);
     }
-  }, [editingEmployee]);
+  }, [selectedEmployee]);
 
   const { depList } = useDepartments();
 
@@ -76,7 +76,7 @@ const EmployeeForm = ({ onSave, onCancel, editingEmployee, deleteEmployee }) => 
     <div className="bg-white w-[40rem] rounded-lg shadow-lg">
       <div className="flex justify-between bg-indigo-200 p-6 rounded-t-lg relative">
         <span className="text-xl font-semibold text-gray-700 mb-6 block">
-          {editingEmployee ? "Update Employee" : "Add Employee"}
+          {selectedEmployee ? "Update Employee" : "Add Employee"}
         </span>
         <div
           onClick={onCancel}
@@ -90,10 +90,10 @@ const EmployeeForm = ({ onSave, onCancel, editingEmployee, deleteEmployee }) => 
             src={
               imageFile
                 ? URL.createObjectURL(imageFile)
-                : editingEmployee?.userId.image?.startsWith("http")
-                ? editingEmployee.userId.image
-                : editingEmployee?.userId.image
-                ? `http://localhost:3000${editingEmployee.userId.image}`
+                : selectedEmployee?.userId.image?.startsWith("http")
+                ? selectedEmployee.userId.image
+                : selectedEmployee?.userId.image
+                ? `http://localhost:3000${selectedEmployee.userId.image}`
                 : "/placeholder.png"
             }
             alt={employee.name}
@@ -102,12 +102,12 @@ const EmployeeForm = ({ onSave, onCancel, editingEmployee, deleteEmployee }) => 
         </div>
       </div>
       <div className="mt-10 p-4">
-        {editingEmployee&&(
+        {selectedEmployee&&(
           <div>
              <h3 className="text-gray-800 font-semibold text-xl">
-          {editingEmployee.name}
+          {selectedEmployee.name}
         </h3>
-        <p className="text-gray-700 text-sm w-full">{editingEmployee.email}</p>
+        <p className="text-gray-700 text-sm w-full">{selectedEmployee.email}</p>
           </div>
         ) }
        
@@ -142,7 +142,7 @@ const EmployeeForm = ({ onSave, onCancel, editingEmployee, deleteEmployee }) => 
           
           <div className="flex space-x-4">
             {/* password */}
-          {!editingEmployee &&
+          {!selectedEmployee &&
           
           <div className="mb-6 flex w-full space-x-4 items-center">
             <label htmlFor="password" className="block text-gray-600 text-sm flex-shrink-0 min-w-max">
@@ -251,10 +251,10 @@ const EmployeeForm = ({ onSave, onCancel, editingEmployee, deleteEmployee }) => 
                         src={
                           imageFile
                             ? URL.createObjectURL(imageFile) // Preview selected file
-                            : editingEmployee?.userId.image?.startsWith("http")
-                            ? editingEmployee.userId.image // Use full URL for existing image
-                            : editingEmployee?.userId.image
-                            ? `http://localhost:3000${editingEmployee.userId.image}` // Use backend-hosted image
+                            : selectedEmployee?.userId.image?.startsWith("http")
+                            ? selectedEmployee.userId.image // Use full URL for existing image
+                            : selectedEmployee?.userId.image
+                            ? `http://localhost:3000${selectedEmployee.userId.image}` // Use backend-hosted image
                             : `/placeholder.png` // Placeholder for no image
                         }
                         alt={employee.emp_name || "Placeholder"}
@@ -262,7 +262,7 @@ const EmployeeForm = ({ onSave, onCancel, editingEmployee, deleteEmployee }) => 
                       />
                     </div>
                     <span className="mt-2 text-indigo-500 text-sm group-hover:underline">
-                      {imageFile || editingEmployee?.userId.image
+                      {imageFile || selectedEmployee?.userId.image
                         ? "Change Image"
                         : "Add Image"}
                     </span>
@@ -271,11 +271,11 @@ const EmployeeForm = ({ onSave, onCancel, editingEmployee, deleteEmployee }) => 
               </label>
             </div>
           <div className="flex justify-between my-6 ">
-          {editingEmployee && <button
+          {selectedEmployee && <button
               type="button"
               className="hover:bg-red-400 bg-red-50 py-1 px-3 rounded-xl text-red-500 border border-red-100 hover:text-white text-sm flex items-center space-x-2 "
            
-              onClick={() =>deleteEmployee(editingEmployee._id)}
+              onClick={() =>deleteEmployee(selectedEmployee._id)}
             >
               <FaTrashAlt />
               <span>Delete Employee</span>
@@ -292,7 +292,7 @@ const EmployeeForm = ({ onSave, onCancel, editingEmployee, deleteEmployee }) => 
               type="submit"
               className="bg-indigo-500 hover:bg-indigo-700 py-1 px-3 rounded-xl text-slate-50 text-sm" 
             >
-              {editingEmployee ? "Update Employee" : "Create Employee"}
+              {selectedEmployee ? "Update Employee" : "Create Employee"}
             </button>
             </div>
           </div>
