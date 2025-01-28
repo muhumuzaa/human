@@ -71,17 +71,7 @@ const AdminSidebar = () => {
             <span className="">Employees</span>
           </NavLink>
 
-          <NavLink
-            to={"leaves"}
-            className={({ isActive }) =>
-              isActive
-                ? "flex space-x-2 items-center rounded-lg text-white text-sm hover:text-white bg-indigo-600 py-3 px-2 mb-2"
-                : "flex space-x-2 items-center rounded-lg text-gray-700 text-sm hover:text-white hover:bg-indigo-600 py-3 px-2 mb-2"
-            }
-          >
-            <FaWalking className="" />
-            <span className="">Leaves</span>
-          </NavLink>
+          
           <NavLink
             to={"salary"}
             className={({ isActive }) =>
@@ -92,6 +82,18 @@ const AdminSidebar = () => {
           >
             <FaMoneyBillAlt className="" />
             <span className="">Salary</span>
+          </NavLink>
+
+          <NavLink
+            to={"leaves"}
+            className={({ isActive }) =>
+              isActive
+                ? "flex space-x-2 items-center rounded-lg text-white text-sm hover:text-white bg-indigo-600 py-3 px-2 mb-2"
+                : "flex space-x-2 items-center rounded-lg text-gray-700 text-sm hover:text-white hover:bg-indigo-600 py-3 px-2 mb-2"
+            }
+          >
+            <FaWalking className="" />
+            <span className="">Leaves</span>
           </NavLink>
 
           <div className="flex space-x-2 items-center rounded-lg text-gray-800 text-sm bg-transparent py-3 px-2 mb-2">

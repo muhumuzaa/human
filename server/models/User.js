@@ -7,9 +7,8 @@ const userSchema = mongoose.Schema({
     tel: {type: String},
     role: {type: String, enum: ['admin', 'employee'], required: true},
     image: {type: String},
-    createdAt: {type: Date},
-    updatedAt: {type: Date}
-})
+    
+}, {timestamps: true})
 
 const User = mongoose.model('User', userSchema)
 

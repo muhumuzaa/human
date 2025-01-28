@@ -4,6 +4,7 @@ import router from './routes/auth.js';
 import connectToDB from './db/db.js';
 import departmentRouter from './routes/department.js'
 import employeeRouter from './routes/employee.js'
+import salaryRouter from './routes/salary.js'
 
 
 const app = express();
@@ -25,6 +26,7 @@ app.use('/api/department', departmentRouter)
 
 //For employees
 app.use('/api/employee', employeeRouter)
+app.use('/api/salary', salaryRouter )
 
 // Connect to the database and then start the server
 const startServer = async () => {

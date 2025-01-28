@@ -7,6 +7,7 @@ import RoleBasedRoutes from "./utils/RoleBasedRoutes";
 import DashboardSummary from "./components/dashboard/DashboardSummary";
 import DepartmentList from "./components/departments/DepartmentList";
 import EmployeeList from "./components/employees/EmployeeList";
+import AddSalary from "./components/salary/AddSalary";
 
 
 function App() {
@@ -28,7 +29,7 @@ function App() {
           <Route index element={<DashboardSummary />}></Route>
           <Route path='departments' element={<DepartmentList />}></Route>
           <Route path='employees' element={<EmployeeList />}></Route>
-          <Route path='salary' element={<DepartmentList />}></Route>
+          <Route path='salary' element={<AddSalary />}></Route>
           <Route path='leaves' element={<DepartmentList />}></Route>
           
         </Route>

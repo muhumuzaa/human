@@ -6,9 +6,8 @@ const depSchema = mongoose.Schema({
     description: {type: String, required: true},
     lead: {type: String},
     employees: {type: Number},
-    createAt: {type: Date, default: Date.now},
-    updatedAt: {type: Date, default: Date.now}
+    
 
-})
+}, {timestamps: true})
 
 export const Department = mongoose.model('Department', depSchema)
