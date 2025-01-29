@@ -45,7 +45,7 @@ const addEmployee = async (req, res) => {
     const createdEmployees = []; // To store successfully created employees
 
     for (const emp of employeeData) {
-      const { name, email, password, role, salary, department, tel, image } = emp;
+      const { name, email, password, role, department, tel, image } = emp;
 
       // Basic validation
       if (!name || !email || !password || !role) {
@@ -109,7 +109,6 @@ const addEmployee = async (req, res) => {
       const newEmployee = new Employee({
         userId: savedUser._id,
         department,
-        salary,
       });
       await newEmployee.save();
 
@@ -144,9 +143,9 @@ const addEmployee = async (req, res) => {
 const updateEmployee = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, email, role, salary, department, tel } = req.body;
+    const { name, email, role, department, tel } = req.body;
 
-    if (!name || !email || !department || !salary) {
+    if (!name || !email || !department ) {
       return res
         .status(400)
         .json({ success: false, error: "Required fields are missing" });
@@ -184,8 +183,8 @@ const updateEmployee = async (req, res) => {
       {new: true}
     )
 
-    //update employee doc for dep, salary
-    const employeeDataToUpdate = {salary, department}
+    //update employee doc for dep
+    const employeeDataToUpdate = {department}
 
     const updatedEmployee = await Employee.findByIdAndUpdate(
       id, 

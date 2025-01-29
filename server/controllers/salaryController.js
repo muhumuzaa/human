@@ -38,3 +38,22 @@ export const addSalary = async(req, res) =>{
 
 }
 
+export const getSalary = async(req, res) =>{
+    try{
+        const {id} = req.params
+       //check if id was collected
+       if(!id){
+        return res.status(404).json({success: true, error: 'No Id recieved'})
+       }
+        //find salary with matching id
+        const salary = await Salary.findOne({employeeId: id}).exec()
+        if(!salary){
+            return res.status(404).json({success: false, error: 'No salary found for this employee'})
+        }
+        return res.status(200).json({success: true, salary, message: 'Successfuly fetched salary'})
+    }catch(error){
+        return res.status(500).json({success: false, error: 'Server error fetching salary'})
+    }
+    
+}
+

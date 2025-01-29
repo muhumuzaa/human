@@ -26,6 +26,8 @@ app.use('/api/department', departmentRouter)
 
 //For employees
 app.use('/api/employee', employeeRouter)
+
+//salary
 app.use('/api/salary', salaryRouter )
 
 // Connect to the database and then start the server

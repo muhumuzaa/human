@@ -3,14 +3,14 @@ import EmployeeForm from "./EmployeeForm";
 import axios from "axios";
 import EmployeeCard from "./EmployeeCard";
 import EmployeeDetails from "./EmployeeDetails";
-
+import ViewSalary from "../salary/ViewSalary";
 
 const EmployeeList = () => {
-  const [showForm, setShowForm] = useState(false);
+  const [showPopup, setShowpopup] = useState(false);
   const [employees, setEmployees] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [viewMode, setViewMode] = useState('none')
+  const [viewMode, setViewMode] = useState("none");
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -18,7 +18,7 @@ const EmployeeList = () => {
         const response = await axios.get(
           "http://localhost:3000/api/employee/list"
         );
-        console.log(response.data.employees)
+        console.log(response.data.employees);
         if (response.data.success) {
           setEmployees(response.data.employees);
         }
@@ -31,41 +31,46 @@ const EmployeeList = () => {
     fetchEmployees();
   }, []);
 
-    // Filter employees based on search term
-    const handleSearch = (e) => {
-      setSearchTerm(e.target.value.toLowerCase());
-    };
-  
-  const filteredEmployees = employees.filter((emp) =>{
-    const name = emp.userId?.name || '';
-    return name.toLowerCase().includes(searchTerm)
-  }
-  );
+  // Filter employees based on search term
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value.toLowerCase());
+  };
 
+  const filteredEmployees = employees.filter((emp) => {
+    const name = emp.userId?.name || "";
+    return name.toLowerCase().includes(searchTerm);
+  });
 
   const handleFormOpen = (employee = null) => {
     setSelectedEmployee(employee);
-    setViewMode('edit')
-    setShowForm(true);
+    setViewMode("edit");
+    setShowpopup(true);
   };
 
   const handleFormClose = () => {
     setSelectedEmployee(null);
-    setViewMode('none')
-    setShowForm(false);
+    setViewMode("none");
+    setShowpopup(false);
   };
 
-  const handleViewDetails = (employee) =>{
+  const handleViewDetails = (employee) => {
     setSelectedEmployee(employee)
-    setViewMode('view')
-    setShowForm(true)
+    setShowpopup(true);
+    setViewMode("view");
+  };
+
+  const handleViewSalary = async(employee) =>{
+    setSelectedEmployee(employee)
+    setShowpopup(true)
+    setViewMode("salary")
   }
+
   const handleEditorCreateEmployee = async (formData) => {
     try {
-      if (editingEmployee) {
+      if (selectedEmployee) {
         //editing employee
         const response = await axios.put(
-          `http://localhost:3000/api/employee/update/${editingEmployee._id}`,
+          `http://localhost:3000/api/employee/update/${selectedEmployee._id}`,
           formData,
           {
             headers: {
@@ -77,7 +82,7 @@ const EmployeeList = () => {
         console.log("upading object: ", formData);
         if (response.data.success) {
           const updatedEmployee = response.data.employee;
-          console.log('updated employee: ', updatedEmployee)
+          console.log("updated employee: ", updatedEmployee);
 
           setEmployees((prev) =>
             prev.map((emp) =>
@@ -99,12 +104,11 @@ const EmployeeList = () => {
             },
           }
         );
-        
+
         if (response.data.success) {
-         
           setEmployees((prev) => [...prev, ...response.data.employees]);
           alert("Employee successfully created");
-          console.log('Created employee: ', response.data.employees)
+          console.log("Created employee: ", response.data.employees);
         }
       }
       handleFormClose();
@@ -116,31 +120,33 @@ const EmployeeList = () => {
       }
     }
   };
-
   const handleDeleteEmployee = async (id) => {
-    const confirmDelete = window.confirm(`Are you sure you want to delete record?`)
-    if(!confirmDelete)return
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete record?`
+    );
+    if (!confirmDelete) return;
     try {
       const response = await axios.delete(
         "http://localhost:3000/api/employee/delete",
         {
-            params: {id},
+          params: { id },
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
-      
+
       if (response.data.success) {
         alert("Employee successfully deleted");
         setEmployees((prev) => prev.filter((emp) => emp._id !== id));
-        handleFormClose()
+        handleFormClose();
       }
     } catch (error) {
-      console.error("Error deleting employee:", error.response?.data?.error || error.message);
+      console.error(
+        "Error deleting employee:",
+        error.response?.data?.error || error.message
+      );
       alert(error.response?.data?.error || "Server error deleting employee.");
     }
   };
-
-  
   return (
     <div className="relative">
       {/* Main content */}
@@ -171,7 +177,8 @@ const EmployeeList = () => {
                 employee={emp}
                 editEmployee={handleFormOpen}
                 deleteEmployee={handleDeleteEmployee}
-                viewDetails ={handleViewDetails}
+                viewDetails={handleViewDetails}
+                onViewSalary = {handleViewSalary}
               />
             ))
           ) : (
@@ -181,7 +188,7 @@ const EmployeeList = () => {
       </div>
 
       {/* Pop-up Model */}
-      {showForm && (
+      {showPopup && (
         <div className="fixed inset-0 flex items-center justify-center z-10">
           {/* overlay */}
           <div
@@ -190,31 +197,30 @@ const EmployeeList = () => {
           ></div>
 
           {/* Form */}
-          
-           
+
           <div className="relative z-20">
-            {
-              viewMode === 'edit' &&(
-                <EmployeeForm
-              onCancel={handleFormClose}
-              onSave={handleEditorCreateEmployee}
-              selectedEmployee={selectedEmployee} //how the employee object comes from the EmployeeCard to the EmployeList through useState hook to the EmployeeForm
-              deleteEmployee={handleDeleteEmployee}
-            />
-              )
-            }
-            
-            {
-            viewMode === 'view' && (
-              <EmployeeDetails selectedEmployee = {selectedEmployee} onCancel={handleFormClose} editEmployee={handleFormOpen} deleteEmployee={handleDeleteEmployee}/>
-            )
-          }
+            {viewMode === "edit" && (
+              <EmployeeForm
+                onCancel={handleFormClose}
+                onSave={handleEditorCreateEmployee}
+                selectedEmployee={selectedEmployee} //how the employee object comes from the EmployeeCard to the EmployeList through useState hook to the EmployeeForm
+                deleteEmployee={handleDeleteEmployee}
+              />
+            )}
+
+            {viewMode === "view" && (
+              <EmployeeDetails
+                selectedEmployee={selectedEmployee}
+                onCancel={handleFormClose}
+                editEmployee={handleFormOpen}
+                deleteEmployee={handleDeleteEmployee}
+              />
+            )}
+
+            {viewMode === 'salary' && (
+              <ViewSalary selectedEmployee= {selectedEmployee}/>
+            )}
           </div>
-            
-            
-          
-         
-          
         </div>
       )}
       <div></div>

@@ -21,7 +21,6 @@ const EmployeeForm = ({ onSave, onCancel, selectedEmployee, deleteEmployee }) =>
         email: selectedEmployee.userId.email || "",
         tel: selectedEmployee.userId.tel || "",
         department: selectedEmployee.department._id || "",
-        salary: selectedEmployee.salary || "",
         password: "",
         role: selectedEmployee.userId.role || ""
       });
@@ -32,7 +31,6 @@ const EmployeeForm = ({ onSave, onCancel, selectedEmployee, deleteEmployee }) =>
         email: "",
         tel: "",
         department: "",
-        salary: "",
         password: "",
         role: ""
       });
@@ -170,21 +168,7 @@ const EmployeeForm = ({ onSave, onCancel, selectedEmployee, deleteEmployee }) =>
               className="p-2 border border-gray-200 rounded-xl w-full flex-grow"
             />
           </div>
-          </div>
-          {/* salary */}
-            <div className="mb-6 flex space-x-4 w-full items-center">
-              <label htmlFor="salary" className="block text-gray-600 text-sm">
-                Salary
-              </label>
-              <input
-                type="number"
-                name="salary"
-                onChange={handleInputChange}
-                value={employee.salary || ""}
-                className="p-2 border border-gray-200 rounded-xl w-full"
-              />
-            </div>
-          
+          </div>   
           <div className="flex space-x-6 items-center mb-6">
             {/* department */}
           <div className="space-x-4">
