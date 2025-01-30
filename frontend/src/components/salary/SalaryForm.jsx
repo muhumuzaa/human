@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react";
 import { useDepartments } from "../../context/DepartmentContext";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 
-const AddSalary = () => {
+const SalaryForm = ({salary}) => {
 
+  const location = useLocation()
+   const salaryData = location.state?.salary || {};
   const defaultFormstate = {
-    department: "",
-    employeeId: "",
-    basicSalary: "",
-    allowances: "",
-    deductions: "",
-    payDate: "",
+    department: salaryData.employeeId?.department?._id ||"no there",
+    employeeId: salaryData.employeeId._id ||"",
+    basicSalary: salaryData.basicSalary || "",
+    allowances: salaryData.allowances || "",
+    deductions: salaryData.deductions || "",
+    payDate: salaryData.payDate ? salaryData.payDate.split("T")[0] : "",
   }
   const { depList } = useDepartments();
 
@@ -32,6 +35,8 @@ const AddSalary = () => {
     };
     fetchEmployees();
   }, []);
+
+
 
   // Filter employees based on selected department
   useEffect(() => {
@@ -79,7 +84,8 @@ const AddSalary = () => {
   return (
     <div className="bg-white max-w-lg mx-auto rounded-lg shadow-lg">
       <div className="bg-indigo-300 p-6 rounded-t-lg">
-        <h2 className="text-xl font-semibold text-white">Add Salary</h2>
+        <h2 className="text-xl font-semibold text-white">{salaryData? `Update ${salaryData.employeeId?.name || 'employee'}'s salary`: "Add New Salary"}</h2>
+        <h2 className="text-xl font-semibold text-white">{salaryData.employeeId?.department?._id ||"no there"}</h2>
       </div>
       <div className="p-6">
         <form className="space-y-6" onSubmit={handleSalarySave}>
@@ -187,7 +193,7 @@ const AddSalary = () => {
             type="submit"
             className="block w-full bg-indigo-500 text-white py-2 rounded-lg hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-400"
           >
-            Add Salary
+            {salaryData? "Update Salary": "Add Salary"}
           </button>
         </form>
       </div>
@@ -195,4 +201,4 @@ const AddSalary = () => {
   );
 };
 
-export default AddSalary;
+export default SalaryForm;
