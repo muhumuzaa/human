@@ -1,40 +1,29 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, empSalary } from "react";
 import { useNavigate } from "react-router-dom";
 
-const ViewSalary = ({ selectedEmployee, onCancel }) => {
-  const [empSalary, setEmpSalary] = useState({});
-
+const ViewSalary = ({ selectedEmployee, onCancel, empSalary }) => {
   const navigate = useNavigate();
 
-  //fetch salary
-  useEffect(() => {
-    const fetchEmpSalary = async (id) => {
-      try {
-        const response = await axios.get(
-          `http://localhost:3000/api/salary/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-        if (response.data.success) {
-          setEmpSalary(response.data.salary);
-          console.log(empSalary);
-        }
-      } catch (error) {
-        alert(error.response.data.error || error.message);
-      }
-    };
-    if (selectedEmployee && selectedEmployee._id) {
-      fetchEmpSalary(selectedEmployee._id);
-    }
-  }, [selectedEmployee]);
-
-  if (!selectedEmployee) {
-    return <div>No Employee data</div>;
+  if(!selectedEmployee){
+    return <div>No employee data</div>
   }
+
+  if (!empSalary || !empSalary._id) {
+    return (
+      <div className="bg-white min-w-lg mx-auto rounded-lg shadow-lg p-6">
+        <p>This employee has no salary data. First add their data:</p>
+        <button
+          onClick={() => navigate("/admin-dashboard/salary")}
+          className="mt-4 bg-indigo-500 text-white py-1 px-3 rounded hover:bg-indigo-600"
+        >
+          Add Salary Data
+        </button>
+      </div>
+    );
+  }
+
+  
 
   const handleEdit = () => {
     {

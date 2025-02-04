@@ -12,6 +12,8 @@ const EmployeeList = () => {
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [viewMode, setViewMode] = useState("none");
 
+  const [empSalary, setEmpSalary] = useState({});
+
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
@@ -54,16 +56,10 @@ const EmployeeList = () => {
   };
 
   const handleViewDetails = (employee) => {
-    setSelectedEmployee(employee)
+    setSelectedEmployee(employee);
     setShowpopup(true);
     setViewMode("view");
   };
-
-  const handleViewSalary = async(employee) =>{
-    setSelectedEmployee(employee)
-    setShowpopup(true)
-    setViewMode("salary")
-  }
 
   const handleEditorCreateEmployee = async (formData) => {
     try {
@@ -147,6 +143,34 @@ const EmployeeList = () => {
       alert(error.response?.data?.error || "Server error deleting employee.");
     }
   };
+
+  const handleViewSalary = async (employee) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/api/salary/${employee._id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      if (response.data.success) {
+        setEmpSalary(response.data.salary);
+        setSelectedEmployee(employee);
+        setViewMode("salary");
+        setShowpopup(true);
+      }
+    } catch (error) {
+      if (error.response?.status === 404) {
+        
+        setSelectedEmployee(employee);
+        setEmpSalary(null); // Means no salary which displays ui with button
+        setViewMode("salary"); // Then in your <ViewSalary>, you handle the no-salary fallback UI
+        setShowpopup(true);
+      } 
+    }
+  };
+
   return (
     <div className="relative">
       {/* Main content */}
@@ -178,7 +202,7 @@ const EmployeeList = () => {
                 editEmployee={handleFormOpen}
                 deleteEmployee={handleDeleteEmployee}
                 viewDetails={handleViewDetails}
-                onViewSalary = {handleViewSalary}
+                onViewSalary={handleViewSalary}
               />
             ))
           ) : (
@@ -217,8 +241,12 @@ const EmployeeList = () => {
               />
             )}
 
-            {viewMode === 'salary' && (
-              <ViewSalary selectedEmployee= {selectedEmployee} onCancel={handleFormClose}/>
+            {viewMode === "salary" && (
+              <ViewSalary
+                selectedEmployee={selectedEmployee}
+                onCancel={handleFormClose}
+                empSalary={empSalary}
+              />
             )}
           </div>
         </div>
