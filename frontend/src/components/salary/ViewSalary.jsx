@@ -1,14 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate} from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 
-const ViewSalary = ({ selectedEmployee }) => {
+const ViewSalary = ({ selectedEmployee, onCancel }) => {
   const [empSalary, setEmpSalary] = useState({});
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  
-//fetch salary
+  //fetch salary
   useEffect(() => {
     const fetchEmpSalary = async (id) => {
       try {
@@ -33,15 +32,34 @@ const ViewSalary = ({ selectedEmployee }) => {
     }
   }, [selectedEmployee]);
 
- 
-
   if (!selectedEmployee) {
     return <div>No Employee data</div>;
   }
 
-  const handleEdit = () =>{
-    {navigate('/admin-dashboard/salary', {state: {salary: empSalary}})
-  }}
+  const handleEdit = () => {
+    {
+      navigate("/admin-dashboard/salary", { state: { salary: empSalary } });
+    }
+  };
+
+  const handleDelete = async (id) => {
+    console.log("id sent from front end is: ", id);
+    try {
+      const response = await axios.delete(
+        `http://localhost:3000/api/salary/delete/${id}`,
+        {
+            params: {id},
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+      if (response.data.success) {
+        alert(response.data.message);
+        onCancel();
+      }
+    } catch (error) {
+      alert(error.response?.data?.error || error.message);
+    }
+  };
 
   return (
     <div className="bg-white min-w-lg mx-auto rounded-lg shadow-lg w-full items-center justify-center">
@@ -50,6 +68,7 @@ const ViewSalary = ({ selectedEmployee }) => {
           View Salary for {selectedEmployee.userId.name}
         </h2>
       </div>
+      
       <div className="space-y-4 py-6 px-8">
         <p>
           <strong>Basic Salary:</strong> {empSalary.basicSalary}
@@ -69,10 +88,22 @@ const ViewSalary = ({ selectedEmployee }) => {
         </p>
       </div>
       <div className="flex justify-between px-8 py-4">
-        <button className="border border-gray-400 bg-gray-100 rounded-lg py-1 px-3 hover:bg-gray-200" onClick={handleEdit}>Edit</button>
-        <button className="border border-red-400 bg-red-100 rounded-lg py-1 px-3 hover:bg-red-400 hover:text-white">Delete</button>
+        <button
+          className="border border-gray-400 bg-gray-100 rounded-lg py-1 px-3 hover:bg-gray-200"
+          onClick={handleEdit}
+        >
+          Edit
+        </button>
+        <button
+          className="border border-red-400 bg-red-100 rounded-lg py-1 px-3 hover:bg-red-400 hover:text-white"
+          onClick={() => handleDelete(empSalary._id)}
+        >
+          Delete
+        </button>
       </div>
     </div>
+   
+   
   );
 };
 

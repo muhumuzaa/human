@@ -74,3 +74,27 @@ export const getSalary = async (req, res) => {
       .json({ success: false, error: "Server error fetching salary" });
   }
 };
+
+export const deleteSalary = async (req, res) =>{
+    try{
+        
+    const {id} = req.params
+    console.log('id is ', id)
+    if(!id){
+        return res.status(404).json({success: false, error: 'No id provided'})
+    }
+
+    //check if salary obj exists
+    const salaryExists = await Salary.findById({_id: id})
+    if(!salaryExists){
+        return res.status(404).json({success: false, error: 'Salary you are trying to delete doesnt exist'})
+    }
+
+    await Salary.findByIdAndDelete({_id:id})
+    return res.status(200).json({success: true, message: 'Salary successfully deleted'})
+
+    }catch(error){
+        return res.status(500).json({success: false, error: 'Server error deleting salary'})
+    }
+    
+}

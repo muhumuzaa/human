@@ -218,7 +218,7 @@ const EmployeeList = () => {
             )}
 
             {viewMode === 'salary' && (
-              <ViewSalary selectedEmployee= {selectedEmployee} />
+              <ViewSalary selectedEmployee= {selectedEmployee} onCancel={handleFormClose}/>
             )}
           </div>
         </div>

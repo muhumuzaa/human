@@ -6,10 +6,11 @@ import { useLocation } from "react-router-dom";
 const SalaryForm = ({salary}) => {
 
   const location = useLocation()
-   const salaryData = location.state?.salary || {};
+  const salaryData = location.state?.salary || {};
+
   const defaultFormstate = {
     department: salaryData.employeeId?.department?._id ||"no there",
-    employeeId: salaryData.employeeId._id ||"",
+    employeeId: salaryData.employeeId?._id ||"",
     basicSalary: salaryData.basicSalary || "",
     allowances: salaryData.allowances || "",
     deductions: salaryData.deductions || "",
@@ -84,8 +85,7 @@ const SalaryForm = ({salary}) => {
   return (
     <div className="bg-white max-w-lg mx-auto rounded-lg shadow-lg">
       <div className="bg-indigo-300 p-6 rounded-t-lg">
-        <h2 className="text-xl font-semibold text-white">{salaryData? `Update ${salaryData.employeeId?.name || 'employee'}'s salary`: "Add New Salary"}</h2>
-        <h2 className="text-xl font-semibold text-white">{salaryData.employeeId?.department?._id ||"no there"}</h2>
+        <h2 className="text-xl font-semibold text-white">{salaryData._id? `Update ${salaryData.employeeId?.name}'s salary`: "Add New Salary"}</h2>
       </div>
       <div className="p-6">
         <form className="space-y-6" onSubmit={handleSalarySave}>
@@ -193,7 +193,7 @@ const SalaryForm = ({salary}) => {
             type="submit"
             className="block w-full bg-indigo-500 text-white py-2 rounded-lg hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-400"
           >
-            {salaryData? "Update Salary": "Add Salary"}
+            {salaryData._id? "Update Salary": "Add Salary"}
           </button>
         </form>
       </div>
