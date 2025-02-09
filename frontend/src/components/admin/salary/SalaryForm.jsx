@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useDepartments } from "../../context/DepartmentContext";
+import { useDepartments } from "../../../context/DepartmentContext";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 

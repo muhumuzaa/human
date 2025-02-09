@@ -14,8 +14,7 @@ import {
 } from "react-icons/fa";
 import Bargraph from "./dashboard_elements/Bargraph";
 import InfoCardLong from "./dashboard_elements/InfoCardLong";
-import { useDepartments } from "../../context/DepartmentContext";
-
+import { useDepartments } from "../../../context/DepartmentContext";
 
 
 const Dashboard = () => {

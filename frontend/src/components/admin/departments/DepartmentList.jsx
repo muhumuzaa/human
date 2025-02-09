@@ -2,7 +2,7 @@ import { useState } from "react";
 import DepartmentForm from "./DepartmentForm";
 
 import DepartmentCard from "./DepartmentCard";
-import { useDepartments } from "../../context/DepartmentContext";
+import { useDepartments } from "../../../context/DepartmentContext";
 
 const DepartmentList = () => {
   const [showDepForm, setShowDepForm] = useState(false);

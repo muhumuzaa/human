@@ -4,10 +4,10 @@ import AdminDashboard from "./pages/AdminDashboard";
 import EmployeeDashboard from "./pages/EmployeeDashboard";
 import PrivateRoutes from "./utils/PrivateRoutes";
 import RoleBasedRoutes from "./utils/RoleBasedRoutes";
-import DashboardSummary from "./components/dashboard/DashboardSummary";
-import DepartmentList from "./components/departments/DepartmentList";
-import EmployeeList from "./components/employees/EmployeeList";
-import SalaryForm from "./components/salary/SalaryForm";
+import DashboardSummary from "./components/admin/dashboard/DashboardSummary";
+import DepartmentList from "./components/admin/departments/DepartmentList";
+import EmployeeList from "./components/admin/employees/EmployeeList";
+import SalaryForm from "./components/admin/salary/SalaryForm";
 
 
 

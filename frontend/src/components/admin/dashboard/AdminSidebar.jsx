@@ -14,7 +14,7 @@ import {
   FaUpload,
 } from "react-icons/fa6";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../../context/AuthContext";
 
 const AdminSidebar = () => {
 

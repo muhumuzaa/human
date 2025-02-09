@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useEffect, useState, empSalary } from "react";
 import { useNavigate } from "react-router-dom";
 
 const ViewSalary = ({ selectedEmployee, onCancel, empSalary }) => {

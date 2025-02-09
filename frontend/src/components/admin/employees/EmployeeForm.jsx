@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useDepartments } from "../../context/DepartmentContext";
+import { useDepartments } from "../../../context/DepartmentContext";
 import { FaXmark } from "react-icons/fa6";
 import { FaTrash, FaTrashAlt } from "react-icons/fa";
 
