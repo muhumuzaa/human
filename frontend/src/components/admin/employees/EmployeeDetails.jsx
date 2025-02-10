@@ -13,15 +13,16 @@ const EmployeeDetails = ({
   deleteEmployee,
 }) => {
   const [employee, setEmployee] = useState(null);
-  const { id } = useParams();
+  const { userId } = useParams();
   const { user } = useAuth();
 
   useEffect(() => {
     const fetchEmployee = async () => {
-      if (!id) return;
+      if (!userId) return;
+      console.log(userId)
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/employee/${id}`,
+          `http://localhost:3000/api/employee/user/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -36,7 +37,7 @@ const EmployeeDetails = ({
       }
     };
     fetchEmployee();
-  }, [id]);
+  }, [userId]);
   
 
   if (!employee) {
@@ -87,10 +88,10 @@ const EmployeeDetails = ({
       <div className="p-1 flex-1 rounded-r-xl w-[400px] h-[400px] object-cover">
         <img
           src={
-            employee?.userId.image.startsWith("http")
-              ? employee?.userId.image
-              : employee?.userId.image
-              ? `http://localhost:3000${employee?.userId.image}`
+            employee?.userId?.image?.startsWith("http")
+              ? employee?.userId?.image
+              : employee?.userId?.image
+              ? `http://localhost:3000${employee.userId.image}`
               : "placeholder.png"
           }
           alt={employee.userId?.name}

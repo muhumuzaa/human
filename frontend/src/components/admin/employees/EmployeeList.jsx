@@ -117,6 +117,33 @@ const EmployeeList = () => {
     }
   };
   
+  const handleDeleteEmployee = async (id) => {
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete record?`
+    );
+    if (!confirmDelete) return;
+    try {
+      const response = await axios.delete(
+        "http://localhost:3000/api/employee/delete",
+        {
+          params: { id },
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+
+      if (response.data.success) {
+        alert("Employee successfully deleted");
+        setEmployees((prev) => prev.filter((emp) => emp._id !== id));
+        handleFormClose();
+      }
+    } catch (error) {
+      console.error(
+        "Error deleting employee:",
+        error.response?.data?.error || error.message
+      );
+      alert(error.response?.data?.error || "Server error deleting employee.");
+    }
+  };
 
   const handleViewSalary = async (employee) => {
     try {
@@ -174,7 +201,7 @@ const EmployeeList = () => {
                 key={emp._id}
                 employee={emp}
                 editEmployee={handleFormOpen}
-          
+                deleteEmployee={handleDeleteEmployee}
                 viewDetails={handleViewDetails}
                 onViewSalary={handleViewSalary}
               />

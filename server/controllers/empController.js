@@ -31,9 +31,10 @@ const getEmployees = async (req, res) => {
 
 const getEmployeeByUserId = async(req, res) =>{
   try{
-    const {userId} = req.query
-    const employee = await Employee.findOne(userId).populate('department', 'dep_name')
-    // console.log(employee)
+    const {id} = req.params
+    console.log('params: ',id)
+    const employee = await Employee.findOne({userId: id}).populate('department', 'dep_name')
+     console.log(employee)
     if(!employee){
       return res.status(404).json({success: false, error: 'Employee wasnot found'})
     }
@@ -284,4 +285,4 @@ const deleteEmployee = async (req, res) => {
   }
 };
 
-export { addEmployee, getEmployees, updateEmployee, deleteEmployee, getEmployeeByUserId, getEmployeeById };
+export { addEmployee, getEmployees, updateEmployee, deleteEmployee, getEmployeeByUserId };
