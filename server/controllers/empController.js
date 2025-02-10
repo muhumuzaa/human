@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
+import { error } from "console";
 
 const getEmployees = async (req, res) => {
   try {
@@ -42,9 +43,19 @@ const getEmployeeByUserId = async(req, res) =>{
   }
 }
 
-const getEmployeeById = async(req, res) =>{
-  
-}
+// const getEmployeeById = async(req, res) =>{
+//   try{
+//     const {empId} = req.params
+//     const employee = await Employee.findById(empId).populate('department')
+//     if(!employee){
+//       return res.status(404).json({success: false, error: 'No employee found'})
+//     }
+//     return res.status(200).json({success:true, employee})
+//   }catch(error){
+//     console.error(error)
+//     return res.status(500).json({success:false, error: 'Server error fetching employee'});
+//   }
+// }
 
 const addEmployee = async (req, res) => {
   try {
@@ -273,4 +284,4 @@ const deleteEmployee = async (req, res) => {
   }
 };
 
-export { addEmployee, getEmployees, updateEmployee, deleteEmployee, getEmployeeByUserId };
+export { addEmployee, getEmployees, updateEmployee, deleteEmployee, getEmployeeByUserId, getEmployeeById };

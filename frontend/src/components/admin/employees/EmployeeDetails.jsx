@@ -9,11 +9,11 @@ import { useAuth } from "../../../context/AuthContext";
 const EmployeeDetails = ({
   onCancel,
   editEmployee,
-  selectedEmployee,
+
   deleteEmployee,
 }) => {
   const [employee, setEmployee] = useState(null);
-  const { id } = useParams;
+  const { id } = useParams();
   const { user } = useAuth();
 
   useEffect(() => {
@@ -37,6 +37,7 @@ const EmployeeDetails = ({
     };
     fetchEmployee();
   }, [id]);
+  
 
   if (!employee) {
     return <div>Loading...</div>;
@@ -69,7 +70,7 @@ const EmployeeDetails = ({
               </button>
               <button
                 className="p-1 border bg-indigo-500 text-white hover:text-white rounded-xl w-full"
-                onClick={() => editEmployee(selectedEmployee)}
+                onClick={() => editEmployee(employee)}
               >
                 Edit
               </button>

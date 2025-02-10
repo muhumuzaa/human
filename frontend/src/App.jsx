@@ -47,6 +47,7 @@ function App() {
         >
           <Route index element ={<EmployeeSummary />}></Route>
           <Route path="profile/:id" element ={<EmployeeDetails />}></Route>
+          
         </Route>
         
       </Routes>
