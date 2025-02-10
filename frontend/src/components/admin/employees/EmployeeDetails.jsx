@@ -19,7 +19,6 @@ const EmployeeDetails = ({
   useEffect(() => {
     const fetchEmployee = async () => {
       if (!userId) return;
-      console.log(userId)
       try {
         const response = await axios.get(
           `http://localhost:3000/api/employee/user/${userId}`,
@@ -43,7 +42,7 @@ const EmployeeDetails = ({
   if (!employee) {
     return <div>Loading...</div>;
   }
-  const canManage = user?.role === "admin" || user?._id === employee.userId._id;
+  const canManage = user?.role === "admin" ;
 
   return (
     <div className="bg-white rounded-lg flex p-2 w-[40rem]">
