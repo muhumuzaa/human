@@ -46,7 +46,7 @@ function App() {
           }
         >
           <Route index element ={<EmployeeSummary />}></Route>
-          <Route path="profile/:id" element ={<EmployeeDetails />}></Route>
+          <Route path="profile/:userId" element ={<EmployeeDetails />}></Route>
           
         </Route>
         

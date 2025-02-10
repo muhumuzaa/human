@@ -33,7 +33,7 @@ const getEmployeeByUserId = async(req, res) =>{
   try{
     const {id} = req.params
     console.log('params: ',id)
-    const employee = await Employee.findOne({userId: id}).populate('department', 'dep_name')
+    const employee = await Employee.findOne({userId: id}).populate('department', 'dep_name').populate('userId')
      console.log(employee)
     if(!employee){
       return res.status(404).json({success: false, error: 'Employee wasnot found'})

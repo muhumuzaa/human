@@ -58,7 +58,8 @@ const EmployeeDetails = ({
           <h2 className="text-2xl text-gray-700 font-semibold">
             {employee.userId.name}
           </h2>
-          <p className="text-gray-700">{employee.userId?.email}</p>
+ 
+          <p className="text-gray-700">{employee?.userId?.email || 'no email'}</p>
           <p className="text-gray-700">{employee.department.dep_name}</p>
           <p className="text-gray-700">{employee.userId?.tel || "not tel"}</p>
           {canManage && (
