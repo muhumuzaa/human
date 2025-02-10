@@ -8,8 +8,9 @@ import DashboardSummary from "./components/admin/dashboard/DashboardSummary";
 import DepartmentList from "./components/admin/departments/DepartmentList";
 import EmployeeList from "./components/admin/employees/EmployeeList";
 import SalaryForm from "./components/admin/salary/SalaryForm";
-
-
+import EmployeeSummary from "./components/employee/EmployeeSummary";
+import { Profile } from "./components/employee/Profile";
+import EmployeeDetails from "./components/admin/employees/EmployeeDetails";
 
 function App() {
   return (
@@ -28,16 +29,26 @@ function App() {
           }
         >
           <Route index element={<DashboardSummary />}></Route>
-          <Route path='departments' element={<DepartmentList />}></Route>
-          <Route path='employees' element={<EmployeeList />}></Route>
-          <Route path='salary' element={<SalaryForm />}></Route>
-          <Route path='leaves' element={<DepartmentList />}></Route>
-          
+          <Route path="departments" element={<DepartmentList />}></Route>
+          <Route path="employees" element={<EmployeeList />}></Route>
+          <Route path="salary" element={<SalaryForm />}></Route>
+          <Route path="leaves" element={<DepartmentList />}></Route>
         </Route>
+
         <Route
           path="employee-dashboard"
-          element={<EmployeeDashboard />}
-        ></Route>
+          element={
+            <PrivateRoutes>
+              <RoleBasedRoutes requiredRole={["employee"]}>
+                <EmployeeDashboard />
+              </RoleBasedRoutes>
+            </PrivateRoutes>
+          }
+        >
+          <Route index element ={<EmployeeSummary />}></Route>
+          <Route path="profile/:id" element ={<EmployeeDetails />}></Route>
+        </Route>
+        
       </Routes>
     </BrowserRouter>
   );

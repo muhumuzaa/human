@@ -17,7 +17,7 @@ import InfoCardLong from "./dashboard_elements/InfoCardLong";
 import { useDepartments } from "../../../context/DepartmentContext";
 
 
-const Dashboard = () => {
+const DashboardSummary = () => {
 
   const {depList} = useDepartments()
   
@@ -145,4 +145,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default DashboardSummary;

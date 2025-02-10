@@ -3,7 +3,6 @@ import {
     FaArrowCircleLeft,
     FaHouseUser,
     FaMoneyBillAlt,
-    FaWalking,
   } from "react-icons/fa";
   import {
     FaBuilding,
@@ -20,7 +19,7 @@ import {
 
 const EmployeeSidebar = () => {
 
-    const {logout} = useAuth()
+    const {logout, user} = useAuth()
     const navigate = useNavigate()
     const handleLogout = async() =>{
         logout()
@@ -35,7 +34,7 @@ const EmployeeSidebar = () => {
     
             <div className="mt-16">
               <NavLink
-                to={"/admin-dashboard"}
+                to={"/employee-dashboard"}
                 className={({ isActive }) =>
                   isActive
                     ? "flex space-x-2 items-center rounded-lg text-white text-sm hover:text-white bg-indigo-600 py-3 px-2 mb-2"
@@ -48,7 +47,7 @@ const EmployeeSidebar = () => {
               </NavLink>
     
               <NavLink
-                to={"departments"}
+                to={`profile/${user._id}`}
                 className={({ isActive }) =>
                   isActive
                     ? "flex space-x-2 items-center rounded-lg text-white text-sm hover:text-white bg-indigo-600 py-3 px-2 mb-2"
@@ -56,11 +55,11 @@ const EmployeeSidebar = () => {
                 }
               >
                 <FaBuilding className="" />
-                <span className="">Departments</span>
+                <span className="">My Profile</span>
               </NavLink>
     
               <NavLink
-                to={"employees"}
+                to={"leaves"}
                 className={({ isActive }) =>
                   isActive
                     ? "flex space-x-2 items-center rounded-lg text-white text-sm hover:text-white bg-indigo-600 py-3 px-2 mb-2"
@@ -68,7 +67,7 @@ const EmployeeSidebar = () => {
                 }
               >
                 <FaPeopleGroup className="" />
-                <span className="">Employees</span>
+                <span className="">Leaves</span>
               </NavLink>
     
               
@@ -84,17 +83,7 @@ const EmployeeSidebar = () => {
                 <span className="">Salary</span>
               </NavLink>
     
-              <NavLink
-                to={"leaves"}
-                className={({ isActive }) =>
-                  isActive
-                    ? "flex space-x-2 items-center rounded-lg text-white text-sm hover:text-white bg-indigo-600 py-3 px-2 mb-2"
-                    : "flex space-x-2 items-center rounded-lg text-gray-700 text-sm hover:text-white hover:bg-indigo-600 py-3 px-2 mb-2"
-                }
-              >
-                <FaWalking className="" />
-                <span className="">Leaves</span>
-              </NavLink>
+             
     
               <div className="flex space-x-2 items-center rounded-lg text-gray-800 text-sm bg-transparent py-3 px-2 mb-2">
                 <span className="">User Management</span>

@@ -28,6 +28,24 @@ const getEmployees = async (req, res) => {
   }
 };
 
+const getEmployeeByUserId = async(req, res) =>{
+  try{
+    const {userId} = req.query
+    const employee = await Employee.findOne(userId).populate('department', 'dep_name')
+    // console.log(employee)
+    if(!employee){
+      return res.status(404).json({success: false, error: 'Employee wasnot found'})
+    }
+    return res.status(200).json({success: true, employee})
+  }catch(error){
+    return res.status(500).json({success: false, error: 'Server error fetching employee'})
+  }
+}
+
+const getEmployeeById = async(req, res) =>{
+  
+}
+
 const addEmployee = async (req, res) => {
   try {
     const { employees } = req.body; // Can be a single object or an array
@@ -255,4 +273,4 @@ const deleteEmployee = async (req, res) => {
   }
 };
 
-export { addEmployee, getEmployees, updateEmployee, deleteEmployee };
+export { addEmployee, getEmployees, updateEmployee, deleteEmployee, getEmployeeByUserId };
