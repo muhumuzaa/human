@@ -32,7 +32,7 @@ app.use('/api/employee', employeeRouter)
 app.use('/api/salary', salaryRouter )
 
 //leaves
-app.use('/api/leave', leaveRouter)
+app.use('/api/leaves', leaveRouter)
 
 // Connect to the database and then start the server
 const startServer = async () => {

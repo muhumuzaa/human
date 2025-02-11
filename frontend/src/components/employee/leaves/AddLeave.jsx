@@ -33,11 +33,12 @@ const AddLeave = () => {
       );
       if(response.data.success){
         alert(response.data.message)
-        navigate('leaves')
+        navigate(-1)
       }
-    }catch(error){
-      
-      alert(error.response.message || error.response.data.error)
+    }catch (error) {
+      console.log("error is:", error);
+      console.log("error.response is:", error.response);
+      alert(error.response?.data?.error || "No error message found");
     }
     
   };
@@ -65,9 +66,9 @@ const AddLeave = () => {
             className="border border-gray-200 rounded-lg p-2"
           >
             <option value="">Select Leave type</option>
-            <option value="sick leave">Sick Leave</option>
-            <option value="casual leave">Casual Leave</option>
-            <option value="annual leave">Annual Leave</option>
+            <option value="Sick leave">Sick leave</option>
+            <option value="Casual leave">Casual leave</option>
+            <option value="Annual leave">Annual leave</option>
           </select>
         </div>
         <div className="mb-4">
@@ -91,9 +92,9 @@ const AddLeave = () => {
           <input
             type="date"
             name="toDate"
+            required
             onChange={handleInputChange}
             value={formData.toDate}
-            placeholder="optional"
             className="p-2 border border-gray-200 rounded-xl w-full"
           />
         </div>
