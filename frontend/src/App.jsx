@@ -9,8 +9,10 @@ import DepartmentList from "./components/admin/departments/DepartmentList";
 import EmployeeList from "./components/admin/employees/EmployeeList";
 import SalaryForm from "./components/admin/salary/SalaryForm";
 import EmployeeSummary from "./components/employee/EmployeeSummary";
-import { Profile } from "./components/employee/Profile";
 import EmployeeDetails from "./components/admin/employees/EmployeeDetails";
+import LeavesList from "./components/employee/leaves/LeavesList";
+import AddLeave from "./components/employee/leaves/AddLeave";
+
 
 function App() {
   return (
@@ -47,6 +49,8 @@ function App() {
         >
           <Route index element ={<EmployeeSummary />}></Route>
           <Route path="profile/:userId" element ={<EmployeeDetails />}></Route>
+          <Route path="leaves" element ={<LeavesList />}></Route>
+          <Route path="leaves/add-leave" element ={<AddLeave />}></Route>
           
         </Route>
         

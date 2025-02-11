@@ -14,7 +14,7 @@ const Navbar = () => {
   useEffect(() =>{
     const fetchEmployee = async () => {
       try {
-        if (!user ||!user._id || user.role ==="admin") return;
+        if (!user ||!user._id || user.role ==="admin") return
         const response = await axios.get(
           `http://localhost:3000/api/employee/user/${user._id}`,
           { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
@@ -63,10 +63,15 @@ const Navbar = () => {
               className="w-full h-full object-cover"
             />
           </div>
-          
+          <span className="flex flex-col">
             <span>{user?.name}</span>
-           
-          
+            <span className="text-xs text-gray-600 -mt-1">
+              {
+                user.role ==="admin"? "Admin": department?.dep_name
+              }
+              
+            </span>
+          </span>
         </div>
       </div>
     </div>

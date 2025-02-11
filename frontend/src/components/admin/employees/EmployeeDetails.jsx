@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import { useDepartments } from "../../../context/DepartmentContext";
 import { FaXmark } from "react-icons/fa6";
-import { FaTrash, FaTrashAlt } from "react-icons/fa";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../../../context/AuthContext";
@@ -9,14 +7,18 @@ import { useAuth } from "../../../context/AuthContext";
 const EmployeeDetails = ({
   onCancel,
   editEmployee,
-
+  selectedEmployee,
   deleteEmployee,
 }) => {
-  const [employee, setEmployee] = useState(null);
+  const [employee, setEmployee] = useState(selectedEmployee||null);
   const { userId } = useParams();
   const { user } = useAuth();
 
   useEffect(() => {
+    if(selectedEmployee){
+      setEmployee(selectedEmployee)
+      return;
+    }
     const fetchEmployee = async () => {
       if (!userId) return;
       try {
@@ -36,29 +38,33 @@ const EmployeeDetails = ({
       }
     };
     fetchEmployee();
-  }, [userId]);
-  
+  }, [userId, selectedEmployee]);
 
   if (!employee) {
     return <div>Loading...</div>;
   }
-  const canManage = user?.role === "admin" ;
+  const canManage = user?.role === "admin";
 
   return (
     <div className="bg-white rounded-lg flex p-2 w-[40rem]">
-      <div
-        onClick={onCancel}
-        className="p-1 border border-gray-300 hover:border-indigo-600 hover:bg-gray-200 rounded-full w-6 h-6 cursor-pointer"
-      >
-        <FaXmark className="text-gray-400 hover:text-indigo-700" />
-      </div>
+      {canManage && (
+        <div
+          onClick={onCancel}
+          className="p-1 border border-gray-300 hover:border-indigo-600 hover:bg-gray-200 rounded-full w-6 h-6 cursor-pointer"
+        >
+          <FaXmark className="text-gray-400 hover:text-indigo-700" />
+        </div>
+      )}
+
       <div className="p-4">
         <div className="flex flex-col h-full justify-center">
           <h2 className="text-2xl text-gray-700 font-semibold">
             {employee.userId.name}
           </h2>
- 
-          <p className="text-gray-700">{employee?.userId?.email || 'no email'}</p>
+
+          <p className="text-gray-700">
+            {employee?.userId?.email || "no email"}
+          </p>
           <p className="text-gray-700">{employee.department.dep_name}</p>
           <p className="text-gray-700">{employee.userId?.tel || "not tel"}</p>
           {canManage && (

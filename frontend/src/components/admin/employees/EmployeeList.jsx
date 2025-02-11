@@ -235,10 +235,10 @@ const EmployeeList = () => {
 
             {viewMode === "view" && (
               <EmployeeDetails
-                selectedEmployee={selectedEmployee}
+                selectedEmployee ={selectedEmployee}
                 onCancel={handleFormClose}
                 editEmployee={handleFormOpen}
-                deleteEmployee={handleDeleteEmployee}
+                deleteEmployee={() =>handleDeleteEmployee(selectedEmployee._id)}
               />
             )}
 
