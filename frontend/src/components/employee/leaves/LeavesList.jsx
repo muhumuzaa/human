@@ -2,10 +2,12 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import moment from 'moment'
+import { useAuth } from "../../../context/AuthContext";
 
 const LeavesList = () => {
   const [leaves, setLeaves] = useState([]);
   const [filterStatus, setFilterStatus] = useState("");
+
 
   useEffect(() => {
     const fetchLeaves = async () => {
@@ -41,17 +43,17 @@ const LeavesList = () => {
           <input
             type="text"
             placeholder="Filter by status"
-            className="rounded-lg p-2 w-full mr-2"
+            className="rounded-lg p-2 w-1/2 mr-2"
             value={filterStatus}
             onChange={e => setFilterStatus(e.target.value)} // Controlled input
           />
-          <Link to={"add-leave"} className="rounded-lg p-2 bg-white text-indigo-600 hover:bg-gray-200">
+          <Link to={"add-leave"} className="rounded-lg p-2 bg-white text-indigo-600 hover:bg-gray-200 w-1/2">
             Request Leave
           </Link>
         </div>
 
 
-        <div className="mt-10 w-full">
+        <div className="mt-10 w-full z-10">
           <table className="w-full bg-white rounded-lg overflow-hidden shadow-md">
             <thead className="text-xs uppercase border-b border-gray-200 bg-gray-50">
               <tr>
@@ -60,6 +62,7 @@ const LeavesList = () => {
                 <th className="px-6 py-3 text-left font-medium text-gray-500">Leave Type</th>
                 <th className="px-6 py-3 text-left font-medium text-gray-500">From</th>
                 <th className="px-6 py-3 text-left font-medium text-gray-500">To</th>
+                <th className="px-6 py-3 text-left font-medium text-gray-500">Reason</th>
                 <th className="px-6 py-3 text-left font-medium text-gray-500">Status</th>
               </tr>
             </thead>
@@ -71,6 +74,7 @@ const LeavesList = () => {
                   <td className="px-6 py-4 whitespace-nowrap">{leave.leaveType}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{moment(leave.fromDate).format('YYYY-MM-DD')}</td> 
                   <td className="px-6 py-4 whitespace-nowrap">{moment(leave.toDate).format('YYYY-MM-DD')}</td> 
+                  <td className="px-6 py-4 whitespace-nowrap">{leave.description}</td> 
                   <td className="px-6 py-4 whitespace-nowrap">{leave.status}</td>
                 </tr>
               ))}
