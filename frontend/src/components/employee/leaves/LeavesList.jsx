@@ -7,6 +7,7 @@ import { useAuth } from "../../../context/AuthContext";
 const LeavesList = () => {
   const [leaves, setLeaves] = useState([]);
   const [filterStatus, setFilterStatus] = useState("");
+
   const {user} = useAuth();
 
   useEffect(() => {
@@ -29,6 +30,8 @@ const LeavesList = () => {
   const filteredLeaves = leaves.filter(leave => 
     leave.status.toLowerCase().includes(filterStatus.toLowerCase())
   ); 
+
+
 
 
   return (

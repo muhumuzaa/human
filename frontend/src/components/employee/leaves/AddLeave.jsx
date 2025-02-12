@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 const AddLeave = () => {
   const {user}= useAuth()
   const navigate = useNavigate()
+  const [error, setError] = useState('')
 
   const [formData, setFormData] = useState({
     userId: user._id,
@@ -20,12 +21,24 @@ const AddLeave = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+
+    if(name === "toDate"){
+      if(new Date(value) < new Date(formData.fromDate)){
+        setError('To-Date cannot be less than from-Date')
+      }else{
+        setError("")
+      }
+    }
   };
 
   const handleSave = async (e) => {
     e.preventDefault();
+    if(new Date(formData.toDate) < new Date(formData.fromDate)){
+      alert('Invalid data range')
+      return;
+    }
     try{
-      console.log('Sending data, ', formData)
+     
       const response = await axios.post(
         "http://localhost:3000/api/leaves/add",
         formData,
@@ -97,6 +110,7 @@ const AddLeave = () => {
             value={formData.toDate}
             className="p-2 border border-gray-200 rounded-xl w-full"
           />
+          {error && <p className="text-red-600">{error}</p>}
         </div>
         <div className="mb-4">
           <label htmlFor="description" className="block">
