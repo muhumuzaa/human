@@ -7,12 +7,12 @@ import { useAuth } from "../../../context/AuthContext";
 const LeavesList = () => {
   const [leaves, setLeaves] = useState([]);
   const [filterStatus, setFilterStatus] = useState("");
-
+  const {user} = useAuth();
 
   useEffect(() => {
     const fetchLeaves = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/leaves", {
+        const response = await axios.get(`http://localhost:3000/api/leaves/${user._id}`, {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
 
@@ -20,11 +20,11 @@ const LeavesList = () => {
           setLeaves(response.data.leaves);
         }
       } catch (error) {
-        alert(error.response?.data?.error?.message || error.message || "An error occurred"); 
+        alert(error.response?.data?.error || "An error occurred"); 
       }
     };
     fetchLeaves();
-  }, []);
+  }, [user]);
 
   const filteredLeaves = leaves.filter(leave => 
     leave.status.toLowerCase().includes(filterStatus.toLowerCase())

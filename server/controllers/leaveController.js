@@ -24,12 +24,23 @@ export const addOrEditLeave = async(req, res) =>{
 
 export const fetchLeaves = async(req, res) =>{
     try{
-        const leaves = await Leave.find();
-        if(!leaves || leaves.length ==0){
+        const {id} = req.params;
+        //first find the user associated with the id. In the backend, we have the id of a user (user._id) from the user table.
+        //But the leaves table instead stores employeeId, which then references the user id in the employee table as userId.
+        //So we have to first get the employee from the employee table
+        const employee = await Employee.findOne({userId: id})
+        if(!employee){
+            return res.status(404).json({success: false, error: 'No employee record found'})
+        }
+        //Now that we have gotten the employee, we use their employeeId in the leaves table to find leaves for that particular employee.
+        //Now I find all leaves where employeeId is the same as employee._id
+        const leaves = await Leave.find({employeeId: employee._id});
+        if(!leaves || leaves.length ===0){
             return res.status(400).json({success: false, error: "No leaves data available"})
         }
         return res.status(200).json({success: true, leaves})
     }catch(error){
-        return res.status(500).json({success: false, error: err.message || "Server error fetching leaves"})
+        console.error(error)
+        return res.status(500).json({success: false, error: error.message || "Server error fetching leaves"})
     }
 }

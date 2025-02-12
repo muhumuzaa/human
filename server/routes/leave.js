@@ -7,6 +7,6 @@ const router = express.Router()
 
 
 router.post('/add', authMiddleware, addOrEditLeave)
-router.get('/', authMiddleware, fetchLeaves)
+router.get('/:id', authMiddleware, fetchLeaves)
 
 export default router;
