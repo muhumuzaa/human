@@ -49,15 +49,15 @@ export const addSalary = async (req, res) => {
   }
 };
 
-export const getSalary = async (req, res) => {
+export const getSalaryByEmpId = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { empId } = req.params;
     //check if id was collected
-    if (!id) {
+    if (!empId) {
       return res.status(404).json({ success: true, error: "No Id recieved" });
     }
     //find salary with matching id
-    const salary = await Salary.findOne({ employeeId: id })
+    const salary = await Salary.findOne({ employeeId: empId })
       .populate({ path: "employeeId", populate: { path: "department" } })
       .exec();
     if (!salary) {
@@ -74,6 +74,39 @@ export const getSalary = async (req, res) => {
       .json({ success: false, error: "Server error fetching salary" });
   }
 };
+
+export const getSalaryByUserId = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    //check if id was collected
+    if (!userId) {
+      return res.status(404).json({ success: true, error: "No Id recieved" });
+    }
+
+    //get employee table
+    const employee = await Employee.findOne({userId})
+    if(!employee){
+      return res.status(400).json({success: false, error: 'Employee not found in employee table'})
+    }
+    //find salary with matching id
+    const salaries = await Salary.find({ employeeId: employee._id })
+      
+    if (!salaries) {
+      return res
+        .status(404)
+        .json({ success: false, error: "No salary found for this employee" });
+    }
+    return res
+      .status(200)
+      .json({ success: true, salaries, message: "Successfuly fetched salaries" });
+  } catch (error) {
+    console.log(error)
+    return res
+      .status(500)
+      .json({ success: false, error: "Server error fetching salaries" });
+  }
+};
+
 
 export const deleteSalary = async (req, res) =>{
     try{
@@ -98,3 +131,4 @@ export const deleteSalary = async (req, res) =>{
     }
     
 }
+

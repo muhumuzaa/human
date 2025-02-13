@@ -4,25 +4,6 @@ import { useNavigate } from "react-router-dom";
 const ViewSalary = ({ selectedEmployee, onCancel, empSalary }) => {
   const navigate = useNavigate();
 
-  if(!selectedEmployee){
-    return <div>No employee data</div>
-  }
-
-  if (!empSalary || !empSalary._id) {
-    return (
-      <div className="bg-white min-w-lg mx-auto rounded-lg shadow-lg p-6">
-        <p>This employee has no salary data. First add their data:</p>
-        <button
-          onClick={() => navigate("/admin-dashboard/salary")}
-          className="mt-4 bg-indigo-500 text-white py-1 px-3 rounded hover:bg-indigo-600"
-        >
-          Add Salary Data
-        </button>
-      </div>
-    );
-  }
-
-  
 
   const handleEdit = () => {
     {
@@ -48,6 +29,25 @@ const ViewSalary = ({ selectedEmployee, onCancel, empSalary }) => {
       alert(error.response?.data?.error || error.message);
     }
   };
+
+
+  if(!selectedEmployee){
+    return <div>No employee data</div>
+  }
+
+  if (!empSalary || !empSalary._id) {
+    return (
+      <div className="bg-white min-w-lg mx-auto rounded-lg shadow-lg p-6">
+        <p>This employee has no salary data. First add their data:</p>
+        <button
+          onClick={() => navigate("/admin-dashboard/salary")}
+          className="mt-4 bg-indigo-500 text-white py-1 px-3 rounded hover:bg-indigo-600"
+        >
+          Add Salary Data
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white min-w-lg mx-auto rounded-lg shadow-lg w-full items-center justify-center">

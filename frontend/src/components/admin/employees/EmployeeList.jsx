@@ -148,7 +148,7 @@ const EmployeeList = () => {
   const handleViewSalary = async (employee) => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/salary/${employee._id}`,
+        `http://localhost:3000/api/salary/employee/${employee._id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

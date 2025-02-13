@@ -72,7 +72,7 @@ const EmployeeSidebar = () => {
     
               
               <NavLink
-                to={"salary"}
+                to={`salary/${user._id}`}
                 className={({ isActive }) =>
                   isActive
                     ? "flex space-x-2 items-center rounded-lg text-white text-sm hover:text-white bg-indigo-600 py-3 px-2 mb-2"
@@ -90,7 +90,7 @@ const EmployeeSidebar = () => {
               </div>
     
               <NavLink
-                to={"support"}
+                to={"settings"}
                 className={({ isActive }) =>
                   isActive
                     ? "flex space-x-2 items-center rounded-lg text-white text-sm hover:text-white bg-indigo-600 py-3 px-2 mb-2"
@@ -98,55 +98,9 @@ const EmployeeSidebar = () => {
                 }
               >
                 <FaKey className="" />
-                <span className="">Security & access</span>
+                <span className="">Settings</span>
               </NavLink>
-              <NavLink
-                to={"support"}
-                className={({ isActive }) =>
-                  isActive
-                    ? "flex space-x-2 items-center rounded-lg text-white text-sm hover:text-white bg-indigo-600 py-3 px-2 mb-2"
-                    : "flex space-x-2 items-center rounded-lg text-gray-700 text-sm hover:text-white hover:bg-indigo-600 py-3 px-2 mb-2"
-                }
-              >
-                <FaCamera className="" />
-                <span className="">Authentication</span>
-              </NavLink>
-    
-              <NavLink
-                to={"support"}
-                className={({ isActive }) =>
-                  isActive
-                    ? "flex space-x-2 items-center rounded-lg text-white text-sm hover:text-white bg-indigo-600 py-3 px-2 mb-2"
-                    : "flex space-x-2 items-center rounded-lg text-gray-700 text-sm hover:text-white hover:bg-indigo-600 py-3 px-2 mb-2"
-                }
-              >
-                <FaUpload className="" />
-                <span className="">Import data</span>
-              </NavLink>
-    
-              <NavLink
-                to={"support"}
-                className={({ isActive }) =>
-                  isActive
-                    ? "flex space-x-2 items-center rounded-lg text-white text-sm hover:text-white bg-indigo-600 py-3 px-2 mb-2"
-                    : "flex space-x-2 items-center rounded-lg text-gray-700 text-sm hover:text-white hover:bg-indigo-600 py-3 px-2 mb-2"
-                }
-              >
-                <FaDownload className="" />
-                <span className="">Export data</span>
-              </NavLink>
-    
-              <NavLink
-                to={"support"}
-                className={({ isActive }) =>
-                  isActive
-                    ? "flex space-x-2 items-center rounded-lg text-white text-sm hover:text-white bg-indigo-600 py-3 px-2 mb-2"
-                    : "flex space-x-2 items-center rounded-lg text-gray-700 text-sm hover:text-white hover:bg-indigo-600 py-3 px-2 mb-2"
-                }
-              >
-                <FaPhone className="" />
-                <span className="">Support</span>
-              </NavLink>
+            
             </div>
           </div>
           <div >

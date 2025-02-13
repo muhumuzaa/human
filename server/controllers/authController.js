@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
 
+
 const Login = async(req, res) =>{
     try{
         await connectTodb()
@@ -30,9 +31,37 @@ const verify = (req, res) =>{
     return res.status(200).json({success: true, user: req.user})
 }
 
+const changePassword = async(req, res) =>{
+    try{
+        const {email, oldPassword, newPassword} = req.body;
+        //check user by email
+        const user = await User.findOne({email})
+        if(!user){
+            return res.status(404).json({success: false, error: 'User record doesnot exist'})
+        }
+
+        //check password is a match
+        const passwordMatch = await bcrypt.compare(oldPassword, user.password)
+        if(!passwordMatch){
+            return res.status(400).json({success: false, error: 'Passwords dont match'})
+        }
+        
+        const hashedPswd = await bcrypt.hash(newPassword, 10)
+
+        user.password = hashedPswd;
+        await user.save();
+
+        return res.status(200).json({success: true, message: 'Password updated successfully'})
+
+    }catch(error){
+        console.error(error)
+        return res.status(500).json({success: false, error: 'Server error changing password'})
+    }
+}
+
 const Logout = async() =>{
     
 }
 
 
-export {Login, verify};
+export {Login, verify, changePassword};

@@ -12,6 +12,10 @@ import EmployeeSummary from "./components/employee/EmployeeSummary";
 import EmployeeDetails from "./components/admin/employees/EmployeeDetails";
 import LeavesList from "./components/employee/leaves/LeavesList";
 import AddLeave from "./components/employee/leaves/AddLeave";
+import Salary from "./components/employee/Salary";
+import Settings from "./components/employee/Settings";
+import Leaves from "./components/admin/leaves/Leaves";
+import LeaveDetails from "./components/admin/leaves/LeaveDetails";
 
 
 function App() {
@@ -34,7 +38,8 @@ function App() {
           <Route path="departments" element={<DepartmentList />}></Route>
           <Route path="employees" element={<EmployeeList />}></Route>
           <Route path="salary" element={<SalaryForm />}></Route>
-          <Route path="leaves" element={<DepartmentList />}></Route>
+          <Route path="leaves" element={<Leaves />}></Route>
+          <Route path="leaves/:id" element={<LeaveDetails />}></Route>
         </Route>
 
         <Route
@@ -51,6 +56,8 @@ function App() {
           <Route path="profile/:userId" element ={<EmployeeDetails />}></Route>
           <Route path="leaves" element ={<LeavesList />}></Route>
           <Route path="leaves/add-leave" element ={<AddLeave />}></Route>
+          <Route path="salary/:id" element ={<Salary />}></Route>
+          <Route path="settings" element ={<Settings />}></Route>
           
         </Route>
         

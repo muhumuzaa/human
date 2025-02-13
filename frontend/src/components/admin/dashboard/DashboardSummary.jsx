@@ -15,11 +15,55 @@ import {
 import Bargraph from "./dashboard_elements/Bargraph";
 import InfoCardLong from "./dashboard_elements/InfoCardLong";
 import { useDepartments } from "../../../context/DepartmentContext";
+import {useState, useEffect} from 'react'
+import axios from 'axios'
 
 
 const DashboardSummary = () => {
 
+  const [employees, setEmployees] = useState([])
+  const [leaves, setLeaves] = useState([])
+
   const {depList} = useDepartments()
+
+
+   useEffect(() => {
+    const fetchEmployees = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/employee/list"
+        );
+        console.log(response.data.employees);
+        if (response.data.success) {
+          setEmployees(response.data.employees);
+        }
+      } catch (error) {
+        if (error.response && !error.response.data.success) {
+          console.log(error.response.data.error);
+        }
+      }
+    };
+    fetchEmployees();
+
+    const fetchLeaves = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/api/leaves`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        });
+
+        if (response.data.success) {
+          setLeaves(response.data.leaves);
+        }
+      } catch (error) {
+        alert(error.response?.data?.error || "An error occurred"); 
+      }
+    };
+
+    fetchLeaves();
+  }, []);
+
+
+  const randomEmployee = employees[Math.floor((Math.random() * employees.length))]
   
   return (
     <div>
@@ -27,9 +71,9 @@ const DashboardSummary = () => {
         <InfoCard
           icon={FaPeopleRoof}
           smallTitle={"Total Employees"}
-          bigtitle="189"
+          bigtitle={employees.length}
           borderType={"border-r"}
-          navigateTo={'/admin-dashboard/departments'}
+          navigateTo={'/admin-dashboard/employees'}
         />
         <InfoCard
           icon={FaEarthAfrica}
@@ -38,7 +82,7 @@ const DashboardSummary = () => {
           bgColor="bg-green-600"
           iconColor="text-green-400"
           borderType={"border-r"}
-        navigateTo='/admin-dashboard/employees'
+        navigateTo='/admin-dashboard/departments'
         />
         <InfoCard
           icon={FaBatteryThreeQuarters}
@@ -73,17 +117,24 @@ const DashboardSummary = () => {
           </span>
           <div className="rounded-full w-full h-32 bg-gray-400 overflow-clip shadow-lg my-4 z-10">
             <img
-              src="man.jpg"
-              alt="man"
+              src={
+                randomEmployee?.userId?.image.startsWith("http")
+                  ? randomEmployee?.userId?.image
+                  : randomEmployee?.userId?.image
+                  ? `http://localhost:3000${randomEmployee?.userId?.image}`
+                  : "/placeholder.png"
+              }
+              alt={randomEmployee?.userId?.name}
               className="w-full h-full object-cover"
             />
           </div>
           <div className="z-10">
             <span className="block font-semibold text-gray-200">
-              Aaron Schenieder
+              {randomEmployee?.userId?.name}
+             
             </span>
             <span className="block text-xs font-semibold text-gray-300">
-              Marketing
+              {randomEmployee?.department?.dep_name}
             </span>
             <div className="flex space-x-2 items-center">
               <span className="text-gray-300 text-xs">Total Sales:</span>
@@ -111,7 +162,7 @@ const DashboardSummary = () => {
         <div className="flex justify-between space-x-6">
           <InfoCardLong
             smallTitle={"Leaves Applied"}
-            bigtitle={"78"}
+            bigtitle={leaves.length}
             icon={FaArrowUpRightDots}
             iconColor="text-indigo-700"
             bgColor="bg-indigo-600"

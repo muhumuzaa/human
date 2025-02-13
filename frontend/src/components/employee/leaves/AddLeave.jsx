@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
@@ -18,25 +18,39 @@ const AddLeave = () => {
     description: "",
   });
 
+
+
+  useEffect(() => {
+    
+    // if both dates exist, compare them
+    if(formData.fromDate){
+      if (new Date(formData.fromDate) < new Date()) {
+        setError("From-Date cant be in the past");
+      } else {
+        setError("");
+      }
+    }
+    if (formData.fromDate && formData.toDate) {
+      if (new Date(formData.toDate) < new Date(formData.fromDate)) {
+        setError("To-Date cannot be earlier than From-Date");
+      } else {
+        setError("");
+      }
+    }
+  }, [formData.fromDate, formData.toDate]);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-
-    if(name === "toDate"){
-      if(new Date(value) < new Date(formData.fromDate)){
-        setError('To-Date cannot be less than from-Date')
-      }else{
-        setError("")
-      }
-    }
   };
 
   const handleSave = async (e) => {
     e.preventDefault();
-    if(new Date(formData.toDate) < new Date(formData.fromDate)){
-      alert('Invalid data range')
+    if(new Date(formData.fromDate) > new Date(formData.toDate)){
+      alert(error)
       return;
     }
+    
     try{
      
       const response = await axios.post(
@@ -97,6 +111,7 @@ const AddLeave = () => {
             value={formData.fromDate}
             className="p-2 border border-gray-200 rounded-xl w-full"
           />
+      
         </div>
         <div className="mb-4">
           <label htmlFor="toDate" className="block">
@@ -126,7 +141,7 @@ const AddLeave = () => {
           />
         </div>
         <button
-          type="submit"
+          type="submit" disabled= {Boolean(error)}
           className="bg-indigo-500 hover:bg-indigo-700 py-1 px-3 rounded-xl text-slate-50"
         >
           Submit

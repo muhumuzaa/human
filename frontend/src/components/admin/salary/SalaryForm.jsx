@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useDepartments } from "../../../context/DepartmentContext";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const SalaryForm = ({salary}) => {
 
   const location = useLocation()
   const salaryData = location.state?.salary || {};
+  const navigate = useNavigate()
 
   const defaultFormstate = {
     department: salaryData.employeeId?.department?._id ||"no there",
@@ -72,6 +73,7 @@ const SalaryForm = ({salary}) => {
       if (response.data.success) {
         alert(response.data.message);
        setFormData(defaultFormstate)
+        navigate(-1)
       }
     } catch (error) {
       console.error(
