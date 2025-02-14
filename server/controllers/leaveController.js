@@ -107,3 +107,20 @@ export const updateLeave = async(req, res) =>{
     }
 
 }
+
+//route for when admin needs to see all leaves for a particular emoployee by their employeeId. Called for the EmployeeLeaves component.
+export const fetchLeavesByEmployee = async(req, res) =>{
+    try{
+        const {id} = req.params;
+
+       
+        const leaves = await Leave.find({employeeId: id}).populate({path: 'employeeId', populate: [{path: 'userId'}]}).sort({ fromDate: -1});
+        if(!leaves || leaves.length ===0){
+            return res.status(400).json({success: false, error: "No leaves data available"})
+        }
+        return res.status(200).json({success: true, leaves})
+    }catch(error){
+        console.error(error.message)
+        return res.status(500).json({success: false, error: error.message || "Server error fetching leaves"})
+    }
+}

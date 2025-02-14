@@ -100,7 +100,6 @@ export const getSalaryByUserId = async (req, res) => {
       .status(200)
       .json({ success: true, salaries, message: "Successfuly fetched salaries" });
   } catch (error) {
-    console.log(error)
     return res
       .status(500)
       .json({ success: false, error: "Server error fetching salaries" });
@@ -112,7 +111,6 @@ export const deleteSalary = async (req, res) =>{
     try{
         
     const {id} = req.params
-    console.log('id is ', id)
     if(!id){
         return res.status(404).json({success: false, error: 'No id provided'})
     }

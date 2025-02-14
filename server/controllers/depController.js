@@ -60,7 +60,6 @@ const getDepartments = async (req, res) => {
       return res.status(200).json({ success: true, departments });
    
   } catch (error) {
-    console.log(error.message);
     return res
       .status(500)
       .json({ success: false, error: "Server error fetching department list" });
@@ -85,7 +84,6 @@ const delDepartment = async (req, res) => {
       .status(200)
       .json({ success: true, message: "Department deleted successfully" });
   } catch (error) {
-    console.log(error.message);
 
     return res
       .status(500)
@@ -124,7 +122,6 @@ const updateDepartment = async (req, res) => {
       message: `Department ${id} updated successfully`,
     });
   } catch (error) {
-    console.error(error.message);
     return res
       .status(500)
       .json({ success: false, error: "Server error when updating department" });

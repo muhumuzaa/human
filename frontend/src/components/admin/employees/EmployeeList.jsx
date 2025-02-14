@@ -4,6 +4,7 @@ import axios from "axios";
 import EmployeeCard from "./EmployeeCard";
 import EmployeeDetails from "./EmployeeDetails";
 import ViewSalary from "../salary/ViewSalary";
+import EmployeeLeaves from "../leaves/EmployeeLeaves";
 
 const EmployeeList = () => {
   const [showPopup, setShowpopup] = useState(false);
@@ -13,6 +14,7 @@ const EmployeeList = () => {
   const [viewMode, setViewMode] = useState("none");
 
   const [empSalary, setEmpSalary] = useState({});
+  const [leaves, setLeaves] = useState([])
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -172,6 +174,22 @@ const EmployeeList = () => {
     }
   };
 
+  const handleViewEmployeeLeaves = async (empId) => {
+    try {
+      const response = await axios.get(`http://localhost:3000/api/leaves/emp/${empId}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+
+      if (response.data.success) {
+        setLeaves(response.data.leaves);
+        setViewMode("leaves")
+        setShowpopup(true)
+      }
+    } catch (error) {
+      alert(error.response?.data?.error || "An error occurred"); 
+    }
+  };
+
   return (
     <div className="relative">
       {/* Main content */}
@@ -204,6 +222,8 @@ const EmployeeList = () => {
                 deleteEmployee={handleDeleteEmployee}
                 viewDetails={handleViewDetails}
                 onViewSalary={handleViewSalary}
+                onViewEmployeeLeaves ={handleViewEmployeeLeaves}
+               
               />
             ))
           ) : (
@@ -230,6 +250,7 @@ const EmployeeList = () => {
                 onSave={handleEditorCreateEmployee}
                 selectedEmployee={selectedEmployee} //how the employee object comes from the EmployeeCard to the EmployeList through useState hook to the EmployeeForm
                 deleteEmployee={handleDeleteEmployee}
+                
               />
             )}
 
@@ -249,6 +270,15 @@ const EmployeeList = () => {
                 empSalary={empSalary}
               />
             )}
+
+            {
+              viewMode === "leaves" && (
+                <
+                EmployeeLeaves leaves ={leaves}
+                selectedEmployee = {selectedEmployee}
+                />
+              )
+            }
           </div>
         </div>
       )}
