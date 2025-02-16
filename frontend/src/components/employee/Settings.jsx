@@ -159,3 +159,5 @@ const Settings = () => {
 };
 
 export default Settings;
+
+//Writing test case for this component;
