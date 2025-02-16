@@ -43,7 +43,7 @@ const Settings = () => {
       
           if(response.data.success){
               alert(response.data.message)
-              navigate('/employee-dashboard')
+              { response.data.user.role === 'employee' ? navigate('/employee-dashboard'): navigate('/admin-dashboard')}
           }
     }catch(error){
         alert(error.response.data.error || "Error data not showing")

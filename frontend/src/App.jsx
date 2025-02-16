@@ -40,6 +40,7 @@ function App() {
           <Route path="salary" element={<SalaryForm />}></Route>
           <Route path="leaves" element={<Leaves />}></Route>
           <Route path="leaves/:id" element={<LeaveDetails />}></Route>
+          <Route path="settings" element={<Settings />}></Route>
         </Route>
 
         <Route

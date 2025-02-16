@@ -14,7 +14,8 @@ const EmployeeList = () => {
   const [viewMode, setViewMode] = useState("none");
 
   const [empSalary, setEmpSalary] = useState({});
-  const [leaves, setLeaves] = useState([])
+  const [leaves, setLeaves] = useState([]);
+  const [leaveEmployee, setLeaveEmployee] = useState(null)
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -55,12 +56,14 @@ const EmployeeList = () => {
     setSelectedEmployee(null);
     setViewMode("none");
     setShowpopup(false);
+    console.log('closing')
   };
 
   const handleViewDetails = (employee) => {
     setSelectedEmployee(employee);
     setShowpopup(true);
     setViewMode("view");
+    
   };
 
   const handleEditorCreateEmployee = async (formData) => {
@@ -118,7 +121,7 @@ const EmployeeList = () => {
       }
     }
   };
-  
+
   const handleDeleteEmployee = async (id) => {
     const confirmDelete = window.confirm(
       `Are you sure you want to delete record?`
@@ -165,28 +168,32 @@ const EmployeeList = () => {
       }
     } catch (error) {
       if (error.response?.status === 404) {
-        
         setSelectedEmployee(employee);
         setEmpSalary(null); // Means no salary which displays ui with button
         setViewMode("salary"); // Then in your <ViewSalary>, you handle the no-salary fallback UI
         setShowpopup(true);
-      } 
+      }
     }
   };
 
-  const handleViewEmployeeLeaves = async (empId) => {
+  const handleViewEmployeeLeaves = async (employee) => {
     try {
-      const response = await axios.get(`http://localhost:3000/api/leaves/emp/${empId}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
+      const response = await axios.get(
+        `http://localhost:3000/api/leaves/emp/${employee._id}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
 
       if (response.data.success) {
         setLeaves(response.data.leaves);
-        setViewMode("leaves")
-        setShowpopup(true)
+        setViewMode("leaves");
+        setShowpopup(true);
+        setLeaveEmployee(employee.userId.name);
       }
     } catch (error) {
-      alert(error.response?.data?.error || "An error occurred"); 
+      console.log(error.response?.data?.error);
+      alert("Employee has no leaves yet")
     }
   };
 
@@ -222,7 +229,7 @@ const EmployeeList = () => {
                 deleteEmployee={handleDeleteEmployee}
                 viewDetails={handleViewDetails}
                 onViewSalary={handleViewSalary}
-                onViewEmployeeLeaves ={handleViewEmployeeLeaves}
+                onViewEmployeeLeaves={handleViewEmployeeLeaves}
                
               />
             ))
@@ -241,25 +248,26 @@ const EmployeeList = () => {
             onClick={handleFormClose}
           ></div>
 
-          {/* Form */}
+          {/* popup content -scrollable */}
 
-          <div className="relative z-20">
+          <div className="relative z-20  w-full max-w-4xl ">
             {viewMode === "edit" && (
               <EmployeeForm
                 onCancel={handleFormClose}
                 onSave={handleEditorCreateEmployee}
                 selectedEmployee={selectedEmployee} //how the employee object comes from the EmployeeCard to the EmployeList through useState hook to the EmployeeForm
                 deleteEmployee={handleDeleteEmployee}
-                
               />
             )}
 
             {viewMode === "view" && (
               <EmployeeDetails
-                selectedEmployee ={selectedEmployee}
+                selectedEmployee={selectedEmployee}
                 onCancel={handleFormClose}
                 editEmployee={handleFormOpen}
-                deleteEmployee={() =>handleDeleteEmployee(selectedEmployee._id)}
+                deleteEmployee={() =>
+                  handleDeleteEmployee(selectedEmployee._id)
+                }
               />
             )}
 
@@ -271,14 +279,14 @@ const EmployeeList = () => {
               />
             )}
 
-            {
-              viewMode === "leaves" && (
-                <
-                EmployeeLeaves leaves ={leaves}
-                selectedEmployee = {selectedEmployee}
+            {viewMode === "leaves" && (
+              <
+                EmployeeLeaves 
+                leaves = {leaves}
+                leaveEmployee = {leaveEmployee}
+                onCancel={handleFormClose}
                 />
-              )
-            }
+            )}
           </div>
         </div>
       )}
