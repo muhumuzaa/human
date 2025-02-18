@@ -8,7 +8,7 @@ import { error } from "console";
 
 const getEmployees = async (req, res) => {
   try {
-    const employees = await Employee.find().populate("department", "dep_name").populate("userId", "name email role image");
+    const employees = await Employee.find().populate("department", "dep_name").populate("userId", "name email role image").sort({createdAt: -1});
     if (!employees || employees.length === 0) {
       return res
         .status(404)

@@ -1,4 +1,4 @@
-import { Leave } from "../models/Leave.js";
+import  Leave  from "../models/Leave.js";
 import User from "../models/User.js";
 import Employee from "../models/Employee.js";
 import { populate } from "dotenv";
@@ -78,7 +78,7 @@ export const fetchLeaves = async(req, res) =>{
         
         //Now that we have gotten the employee, we use their employeeId in the leaves table to find leaves for that particular employee.
         //Now I find all leaves where employeeId is the same as employee._id
-        const leaves = await Leave.find().populate({path: 'employeeId', populate: [ {path: 'userId'}, {path: 'department'}]})
+        const leaves = await Leave.find().populate({path: 'employeeId', populate: [ {path: 'userId'}, {path: 'department'}]}).sort({createdAt: -1})
         if(!leaves || leaves.length <1){
             return res.status(400).json({success: false, error: "No leaves data available"})
         }

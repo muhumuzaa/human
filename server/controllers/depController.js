@@ -1,4 +1,7 @@
 import { Department } from "../models/Department.js";
+import Employee from "../models/Employee.js";
+import Leave from "../models/Leave.js";
+import Salary from "../models/Salary.js";
 
 const addDepartment = async (req, res) => {
   try {
@@ -50,7 +53,7 @@ const addDepartment = async (req, res) => {
 
 const getDepartments = async (req, res) => {
   try {
-    const departments = await Department.find();
+    const departments = await Department.find().sort({createdAt: -1});
     if (!departments || departments.length === 0) {
       return res
         .status(404)
@@ -74,12 +77,33 @@ const delDepartment = async (req, res) => {
         .status(404)
         .json({ success: false, error: "There is no department ID provided" });
     }
+
+    //dept to delete
     const depToDelete = await Department.findByIdAndDelete(id);
     if (!depToDelete) {
       return res
         .status(404)
         .json({ success: false, error: "Department was not found" });
     }
+
+    //find employees belonging to the department to delete
+    const employees = await Employee.find({department: id})
+
+    //map the employee ids
+    const employeeIds = await Employee((emp) => emp._id)
+
+    //delete all leaves for these employees
+    await Leave.deleteMany({employeeId: {$in : employeeIds}})
+
+    //delete all Salary records for all those employees
+    await Salary.deleteMany({employeeId: {$in : employeeIds}})
+
+    //delete employee records for that department. delete based on department
+    await Employee.deleteMany({department: id})
+
+    //finally delete the department
+    await Department.findByIdAndDelete(id)
+
     return res
       .status(200)
       .json({ success: true, message: "Department deleted successfully" });

@@ -1,7 +1,7 @@
 import { error } from "console";
 import { parse } from "path";
 import Employee from "../models/Employee.js";
-import { Salary } from "../models/Salary.js";
+import  Salary  from "../models/Salary.js";
 import { populate } from "dotenv";
 
 export const addSalary = async (req, res) => {

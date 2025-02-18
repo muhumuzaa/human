@@ -8,4 +8,5 @@ const leaveSchema = mongoose.Schema({
     status: {type: String, enum: ['Pending', 'Approved', 'Rejected'], default: 'Pending'}
 }, {timestamps: true})
 
-export const Leave = mongoose.model('Leave', leaveSchema)
+const Leave = mongoose.model('Leave', leaveSchema)
+export default Leave

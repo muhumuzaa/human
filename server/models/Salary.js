@@ -10,4 +10,6 @@ const salarySchema = mongoose.Schema({
     payDate: {type: Date, required: true},
 }, {timestamps: true});
 
-export const Salary = mongoose.model('Salary', salarySchema);
+
+const Salary = mongoose.model('Salary', salarySchema);
+export default Salary

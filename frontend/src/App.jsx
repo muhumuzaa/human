@@ -13,7 +13,7 @@ import EmployeeDetails from "./components/admin/employees/EmployeeDetails";
 import LeavesList from "./components/employee/leaves/LeavesList";
 import AddLeave from "./components/employee/leaves/AddLeave";
 import Salary from "./components/employee/Salary";
-import Settings from "./components/employee/Settings";
+import Settings from "./context/Settings";
 import Leaves from "./components/admin/leaves/Leaves";
 import LeaveDetails from "./components/admin/leaves/LeaveDetails";
 
