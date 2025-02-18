@@ -97,7 +97,7 @@ const DepartmentProvider = ({ children }) => {
         );
 
         if (response.data.success) {
-          setDepList((prev) => [...prev, response.data.department]);
+          setDepList((prev) => [response.data.department, ...prev]);
         }
       }
     } catch (error) {

@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { Department } from "../models/Department.js";
 import Employee from "../models/Employee.js";
 import Leave from "../models/Leave.js";
@@ -37,9 +38,13 @@ const addDepartment = async (req, res) => {
       const newDep = new Department({ dep_name, description, lead, employees });
       await newDep.save();
 
+      // Immediately fetch sorted departments
+      const sortedDepartments = await Department.find().sort({ createdAt: -1 });
+
       return res.status(201).json({
         success: true,
         department: newDep,
+        departments: sortedDepartments,
         message: "Successfully added new department",
       });
     }
@@ -53,15 +58,14 @@ const addDepartment = async (req, res) => {
 
 const getDepartments = async (req, res) => {
   try {
-    const departments = await Department.find().sort({createdAt: -1});
+    const departments = await Department.find().sort({ createdAt: -1 });
     if (!departments || departments.length === 0) {
       return res
         .status(404)
         .json({ success: false, error: "No departments found" });
     }
-    
-      return res.status(200).json({ success: true, departments });
-   
+
+    return res.status(200).json({ success: true, departments });
   } catch (error) {
     return res
       .status(500)
@@ -70,50 +74,53 @@ const getDepartments = async (req, res) => {
 };
 
 const delDepartment = async (req, res) => {
+
   try {
     const { id } = req.query;
     if (!id) {
+
       return res
         .status(404)
         .json({ success: false, error: "There is no department ID provided" });
     }
 
-    //dept to delete
-    const depToDelete = await Department.findByIdAndDelete(id);
+    // Dept to delete
+    const depToDelete = await Department.findById(id)
     if (!depToDelete) {
+
       return res
         .status(404)
         .json({ success: false, error: "Department was not found" });
     }
 
-    //find employees belonging to the department to delete
-    const employees = await Employee.find({department: id})
+    // Find employees belonging to the department to delete
+    const employees = await Employee.find({ department: id })
+    // Correctly map the employee ids
+    const employeeIds = employees.map((emp) => emp._id);
 
-    //map the employee ids
-    const employeeIds = await Employee((emp) => emp._id)
+    // Delete all leaves and salaries for these employees
+    await Leave.deleteMany({ employeeId: { $in: employeeIds } })
+    await Salary.deleteMany({ employeeId: { $in: employeeIds } })
 
-    //delete all leaves for these employees
-    await Leave.deleteMany({employeeId: {$in : employeeIds}})
-
-    //delete all Salary records for all those employees
-    await Salary.deleteMany({employeeId: {$in : employeeIds}})
-
-    //delete employee records for that department. delete based on department
+    // Delete employee records for that department by looping over each employee individually
     await Employee.deleteMany({department: id})
 
-    //finally delete the department
+    // Finally, delete the department
     await Department.findByIdAndDelete(id)
+
 
     return res
       .status(200)
       .json({ success: true, message: "Department deleted successfully" });
   } catch (error) {
 
+    console.error("Error deleting department:", error.message);
     return res
       .status(500)
       .json({ success: false, error: "Server error on deleting department" });
   }
 };
+
 
 const updateDepartment = async (req, res) => {
   try {

@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
-import { error } from "console";
+
 
 const getEmployees = async (req, res) => {
   try {
@@ -223,20 +223,17 @@ const updateEmployee = async (req, res) => {
 };
 
 const deleteEmployee = async (req, res) => {
-  const session = await mongoose.startSession()
-  session.startTransaction()
+
   try {
     const { id } = req.query;
     if (!id) {
-      await session.abortTransaction()
-      session.endSession()
+
       return res.status(404).json({ success: false, error: "No id provided" });
     } 
   
     const employeeToDelele = await Employee.findById(id).populate('userId');
     if (!employeeToDelele) {
-      await session.abortTransaction()
-      session.endSession()
+
       return res
         .status(404)
         .json({ success: false, error: "Employee to delete was not found" });
@@ -248,13 +245,10 @@ const deleteEmployee = async (req, res) => {
     //delete user
     const userDeleteResult = await User.findByIdAndDelete(userToDelete)
     if(!userDeleteResult){
-      await session.abortTransaction()
-      session.endSession()
+
       return res.status(404).json({success: false, error: 'Employee deleted but associated user not deleted'})
     }
 
-    await session.commitTransaction()
-    session.endSession()
     return res
       .status(200)
       .json({
@@ -262,8 +256,7 @@ const deleteEmployee = async (req, res) => {
         error: `Successfully deleted employee - ${employeeToDelele.emp_name} and their user account`,
       });
   } catch (error) {
-    await session.abortTransaction()
-    session.endSession()
+
     console.error('Error deleting employee: ', error.message);
     return res
       .status(404)
