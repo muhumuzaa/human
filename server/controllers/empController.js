@@ -10,7 +10,7 @@ import Leave from "../models/Leave.js";
 
 const getEmployees = async (req, res) => {
   try {
-    const employees = await Employee.find().populate("department", "dep_name").populate("userId", "name email role image").sort({createdAt: -1});
+    const employees = await Employee.find().populate("department", "dep_name").populate("userId", "name email role image").sort({createdAt: -1}).lean();
     if (!employees || employees.length === 0) {
       return res
         .status(404)

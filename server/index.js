@@ -6,6 +6,7 @@ import departmentRouter from './routes/department.js'
 import employeeRouter from './routes/employee.js'
 import salaryRouter from './routes/salary.js'
 import leaveRouter from './routes/leave.js'
+import SummaryRouter from './routes/summary.js'
 
 
 const app = express();
@@ -33,6 +34,8 @@ app.use('/api/salary', salaryRouter )
 
 //leaves
 app.use('/api/leaves', leaveRouter)
+
+app.use('/api/summary', SummaryRouter)
 
 // Connect to the database and then start the server
 const startServer = async () => {

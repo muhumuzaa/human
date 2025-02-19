@@ -14,56 +14,48 @@ import {
 } from "react-icons/fa";
 import Bargraph from "./dashboard_elements/Bargraph";
 import InfoCardLong from "./dashboard_elements/InfoCardLong";
-import { useDepartments } from "../../../context/DepartmentContext";
+
 import {useState, useEffect} from 'react'
 import axios from 'axios'
 
 
 const DashboardSummary = () => {
 
-  const [employees, setEmployees] = useState([])
-  const [leaves, setLeaves] = useState([])
-
-  const {depList} = useDepartments()
+  const [summary, setSummary] = useState({})
+  const [randomEmployee, setRandomEmployee] = useState(null)
 
 
    useEffect(() => {
+    const fetchSummary = async() =>{
+      try{
+        const summary = await axios.get('http://localhost:3000/api/summary')
+        setSummary(summary.data)
+      }catch(error){
+        console.log(error.response.data.error)
+      }
+    }
+    fetchSummary()
+  }, []);
+
+  //Get employee to show in employee spotlight
+  useEffect(() => {
     const fetchEmployees = async () => {
       try {
         const response = await axios.get(
           "http://localhost:3000/api/employee/list"
         );
-        console.log(response.data.employees);
-        if (response.data.success) {
-          setEmployees(response.data.employees);
+        if (response.data.success && response.data.employees.length) {
+          const randomIndex = Math.floor(Math.random() * response.data.employees.length);
+          setRandomEmployee(response.data.employees[randomIndex]);
         }
       } catch (error) {
-        if (error.response && !error.response.data.success) {
-          console.log(error.response.data.error);
-        }
+        console.error(error.response.data.error);
       }
     };
     fetchEmployees();
-
-    const fetchLeaves = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3000/api/leaves`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        });
-
-        if (response.data.success) {
-          setLeaves(response.data.leaves);
-        }
-      } catch (error) {
-        alert(error.response?.data?.error || "An error occurred"); 
-      }
-    };
-
-    fetchLeaves();
   }, []);
 
 
-  const randomEmployee = employees[Math.floor((Math.random() * employees.length))]
   
   return (
     <div>
@@ -71,14 +63,14 @@ const DashboardSummary = () => {
         <InfoCard
           icon={FaPeopleRoof}
           smallTitle={"Total Employees"}
-          bigtitle={employees.length}
+          bigtitle={summary?.employees}
           borderType={"border-r"}
           navigateTo={'/admin-dashboard/employees'}
         />
         <InfoCard
           icon={FaEarthAfrica}
           smallTitle="Total Departments"
-          bigtitle={depList.length}
+          bigtitle={summary?.departments}
           bgColor="bg-green-600"
           iconColor="text-green-400"
           borderType={"border-r"}
@@ -87,7 +79,7 @@ const DashboardSummary = () => {
         <InfoCard
           icon={FaBatteryThreeQuarters}
           smallTitle="Monthly Pay"
-          bigtitle="$454k"
+          bigtitle={summary.totalSalary}
           bgColor="bg-indigo-500"
           iconColor="text-indigo-600"
         />
@@ -162,14 +154,14 @@ const DashboardSummary = () => {
         <div className="flex justify-between space-x-6">
           <InfoCardLong
             smallTitle={"Leaves Applied"}
-            bigtitle={leaves.length}
+            bigtitle={summary?.leaveSummary?.appliedFor}
             icon={FaArrowUpRightDots}
             iconColor="text-indigo-700"
             bgColor="bg-indigo-600"
           />
           <InfoCardLong
             smallTitle={"Leaves Approved"}
-            bigtitle={"24"}
+            bigtitle={summary?.leaveSummary?.approved}
             icon={FaPage4}
             iconColor="text-green-700"
             bgColor="bg-green-600"
@@ -178,14 +170,14 @@ const DashboardSummary = () => {
         <div className="flex justify-between space-x-6 mt-2">
           <InfoCardLong
             smallTitle={"Leaves Pending"}
-            bigtitle={"78"}
+            bigtitle={summary?.leaveSummary?.pending}
             icon={FaWalkieTalkie}
             iconColor="text-yellow-700"
             bgColor="bg-yellow-600"
           />
           <InfoCardLong
             smallTitle={"Leaves Rejected"}
-            bigtitle={"24"}
+            bigtitle={summary?.leaveSummary?.rejected}
             icon={FaFileCircleXmark}
             iconColor="text-red-700"
             bgColor="bg-red-600"
