@@ -4,6 +4,8 @@ import mongoose from "mongoose";
 
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
+import Salary from "../models/Salary.js";
+import Leave from "../models/Leave.js";
 
 
 const getEmployees = async (req, res) => {
@@ -242,13 +244,14 @@ const deleteEmployee = async (req, res) => {
 
     //delete employee
     await Employee.findByIdAndDelete(id)
-    //delete user
-    const userDeleteResult = await User.findByIdAndDelete(userToDelete)
-    if(!userDeleteResult){
+    //delete user record for that employee
+    await User.findByIdAndDelete(userToDelete)
 
-      return res.status(404).json({success: false, error: 'Employee deleted but associated user not deleted'})
-    }
+    //delete Salary record for that employee
+    await Salary.deleteMany({employeeId: id})
 
+    //delete leave records for that employee
+    await Leave.deleteMany({employeeId: id})
     return res
       .status(200)
       .json({

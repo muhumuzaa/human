@@ -124,7 +124,7 @@ const EmployeeList = () => {
 
   const handleDeleteEmployee = async (id) => {
     const confirmDelete = window.confirm(
-      `Are you sure you want to delete record?`
+      `Are you sure you want to delete Employee?`
     );
     if (!confirmDelete) return;
     try {

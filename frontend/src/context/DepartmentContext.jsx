@@ -38,6 +38,8 @@ const DepartmentProvider = ({ children }) => {
   };
 
   const deleteDepartment = async (id) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete department?")
+    if(!confirmDelete)return;
     try {
       const response = await axios.delete(
         "http://localhost:3000/api/department/delete",

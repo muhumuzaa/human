@@ -13,6 +13,8 @@ const ViewSalary = ({ selectedEmployee, onCancel, empSalary }) => {
 
   const handleDelete = async (id) => {
     console.log("id sent from front end is: ", id);
+    const confirmDelete = window.confirm('You are about to delete this salary record')
+    if(!confirmDelete) return;
     try {
       const response = await axios.delete(
         `http://localhost:3000/api/salary/delete/${id}`,
