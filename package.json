@@ -1,0 +1,11 @@
+{
+    "name": "manpower",
+    "version": "1.0.0",
+    "scripts": {
+      "install:frontend": "cd frontend && npm install",
+      "build:frontend": "cd frontend && npm run build",
+      "install:backend": "cd server && npm install",
+      "start": "cd server && npm start",
+      "postinstall": "npm run install:frontend && npm run install:backend && npm run build:frontend"
+    }
+  }

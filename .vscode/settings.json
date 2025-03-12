@@ -1,1 +1,8 @@
-{}
+{
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/8ca3ac43-0908-4ad1-bbfa-c99f85db9f52/resourceGroups/ambro/providers/Microsoft.Web/sites/ambroapp88",
+    "appService.deploySubpath": "frontend"
+}
