@@ -1,5 +1,5 @@
 import moment from "moment";
-import { FaXmark } from "react-icons/fa6";
+import { FaXmark } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 const EmployeeLeaves = ({ leaves, leaveEmployee, onCancel }) => {

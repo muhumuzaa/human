@@ -12,7 +12,7 @@ import {
   FaPeopleGroup,
   FaPhone,
   FaUpload,
-} from "react-icons/fa6";
+} from "react-icons/fa";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthContext";
 

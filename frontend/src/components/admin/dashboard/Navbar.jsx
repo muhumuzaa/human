@@ -1,5 +1,5 @@
 import { FaSearch } from "react-icons/fa";
-import { FaBell } from "react-icons/fa6";
+import { FaBell } from "react-icons/fa";
 import { useAuth } from "../../../context/AuthContext";
 import { useDepartments } from "../../../context/DepartmentContext";
 import { useEffect, useState } from "react";

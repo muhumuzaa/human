@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import moment from "moment";
-import { FaXmark } from "react-icons/fa6";
+import { FaXmark } from "react-icons/fa";
 
 const LeaveDetails = () => {
   const [leave, setLeave] = useState({});

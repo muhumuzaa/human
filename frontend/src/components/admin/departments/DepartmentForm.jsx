@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { FaXmark } from "react-icons/fa6";
+import { FaXmark } from "react-icons/fa";
 
 const DepartmentForm = ({ onClose, onAddOrEdit, department }) => {
   const [dep, setDep] = useState({

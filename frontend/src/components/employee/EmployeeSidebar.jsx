@@ -6,13 +6,10 @@ import {
   } from "react-icons/fa";
   import {
     FaBuilding,
-    FaCamera,
-    FaDownload,
     FaKey,
     FaPeopleGroup,
-    FaPhone,
-    FaUpload,
-  } from "react-icons/fa6";
+    
+  } from "react-icons/fa";
     import { useAuth } from "../../context/AuthContext";
     import { useNavigate } from "react-router-dom";
 

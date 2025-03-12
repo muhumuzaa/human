@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDepartments } from "../../../context/DepartmentContext";
-import { FaXmark } from "react-icons/fa6";
+import { FaXmark } from "react-icons/fa";
 import { FaTrash, FaTrashAlt } from "react-icons/fa";
 
 const EmployeeForm = ({ onSave, onCancel, selectedEmployee, deleteEmployee }) => {

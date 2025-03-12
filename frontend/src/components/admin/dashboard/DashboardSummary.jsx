@@ -5,7 +5,7 @@ import {
   FaPeopleRoof,
   FaWalkieTalkie,
 
-} from "react-icons/fa6";
+} from "react-icons/fa";
 import InfoCard from "./dashboard_elements/InfoCard";
 import {
   FaArrowAltCircleRight,
